@@ -1,0 +1,9 @@
+<view class="wx-page">
+    <view class="wx-header">
+        <view class="wx-logo">我的</view>
+    </view>
+    <view class="wx-card">
+        <text class="main-title">个人中心</text>
+        <text class="sub-title">这里展示用户信息和设置</text>
+    </view>
+</view>

@@ -1,0 +1,9 @@
+<view class="wx-page">
+    <view class="wx-header">
+        <view class="wx-logo">文章详情</view>
+    </view>
+    <view class="wx-card">
+        <text class="main-title">文章内容</text>
+        <text class="sub-title">这里展示推荐文章的详细内容</text>
+    </view>
+</view>

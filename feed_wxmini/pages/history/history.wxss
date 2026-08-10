@@ -1,0 +1,464 @@
+/* 新风格历史记录页面样式，参考demo.html
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+} */
+
+.wx-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 0;
+    background: linear-gradient(135deg, #f0f7ff 0%, #e6f4ff 100%);
+    min-height: 100vh;
+}
+
+.wx-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 28px;
+    position: relative;
+}
+
+.wx-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 8px 32px rgba(42, 115, 217, 0.08);
+    margin-bottom: 30px;
+}
+
+.statistics-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 20px 0;
+    border-top: 1px solid #f0f6ff;
+    border-bottom: 1px solid #f0f6ff;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 0 20px;
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2a73d9;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 15px;
+    color: #888;
+    font-weight: 500;
+}
+
+.feeding-list {
+    margin-top: 15px;
+}
+
+.feeding-item-card {
+    background: linear-gradient(135deg, #f9fbff 0%, #edf5ff 100%);
+    border-radius: 18px;
+    margin-bottom: 25px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(42, 115, 217, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #e9f1ff;
+}
+
+.feeding-item-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(to bottom, #2a73d9, #4d9dfa);
+    border-radius: 6px 0 0 6px;
+}
+
+.feeding-item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(42, 115, 217, 0.15);
+}
+
+.feeding-item-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(227, 240, 255, 0.7);
+}
+
+.person-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(to bottom right, #2a73d9, #4d9dfa);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 14px;
+    flex-shrink: 0;
+}
+
+.person-name {
+    font-weight: 700;
+    color: #2a73d9;
+    font-size: 18px;
+    margin-right: 16px;
+}
+
+.feeding-time {
+    font-size: 14px;
+    color: #888;
+    margin-left: auto;
+    background: rgba(42, 115, 217, 0.08);
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-weight: 500;
+}
+
+.feeding-item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.food-row,
+.location-row,
+.portion-row,
+.notes-row,
+.score-row,
+.satisfaction-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.row-icon {
+    width: 24px;
+    height: 24px;
+    background: #e6f0ff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2a73d9;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.row-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.food-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.food-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+}
+
+.food-category-tag {
+    background: linear-gradient(90deg, #e3f0ff 0%, #f9fbff 100%);
+    color: #2a73d9;
+    font-size: 13px;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(42, 115, 217, 0.1);
+    border: 1px solid #e0eeff;
+}
+
+.food-description {
+    color: #777;
+    font-size: 14px;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+.location-name {
+    color: #555;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.portion-label,
+.notes-label,
+.score-label,
+.satisfaction-label {
+    color: #888;
+    font-size: 15px;
+    font-weight: 500;
+    min-width: 80px;
+}
+
+.portion-value,
+.notes-value,
+.satisfaction-value {
+    color: #333;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.portion-value {
+    color: #2a73d9;
+    font-weight: 600;
+}
+
+.notes-value {
+    background: rgba(240, 246, 255, 0.6);
+    padding: 10px 15px;
+    border-radius: 10px;
+    line-height: 1.5;
+    margin-top: 5px;
+}
+
+/* 修复的评分星星布局 */
+.score-row-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.star-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.star-icon {
+    font-size: 18px;
+    color: #ffc107;
+    text-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+}
+
+.star-icon.active {
+    color: #ffc107;
+}
+
+.score-value {
+    color: #f5a623;
+    font-weight: 700;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.state-container {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+    font-size: 16px;
+}
+
+.loading-state {
+    color: #2a73d9;
+}
+
+.no-data-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.no-data-icon {
+    font-size: 60px;
+    color: #d0dcec;
+    margin-bottom: 20px;
+}
+
+.empty-message {
+    color: #aaa;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.error-state {
+    color: #ff4d4f;
+}
+
+.footer {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    .wx-page {
+        padding: 6px;
+        min-width: 0;
+        max-width: 100vw;
+    }
+
+    .wx-card {
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(42, 115, 217, 0.08);
+    }
+
+    .wx-logo {
+        font-size: 18px;
+        padding-left: 32px;
+    }
+
+    .wx-logo::before {
+        width: 28px;
+        height: 28px;
+    }
+
+    .feeding-item-card {
+        padding: 12px 8px 12px 12px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+    }
+
+    .feeding-item-header {
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+
+    .person-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+        margin-right: 8px;
+    }
+
+    .person-name {
+        font-size: 14px;
+        margin-right: 8px;
+    }
+
+    .feeding-time {
+        margin-top: 6px;
+        width: 100%;
+        margin-left: 0;
+        font-size: 12px;
+        padding: 3px 8px;
+    }
+
+    .food-row,
+    .location-row,
+    .portion-row,
+    .notes-row,
+    .score-row,
+    .satisfaction-row {
+        gap: 6px;
+    }
+
+    .row-icon {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        margin-top: 1px;
+    }
+
+    .row-content {
+        gap: 2px;
+    }
+
+    .food-main {
+        gap: 4px;
+    }
+
+    .food-name {
+        font-size: 13px;
+    }
+
+    .food-category-tag {
+        font-size: 10px;
+        padding: 2px 8px;
+    }
+
+    .food-description {
+        font-size: 11px;
+    }
+
+    .location-name {
+        font-size: 12px;
+    }
+
+    .portion-label,
+    .notes-label,
+    .score-label,
+    .satisfaction-label {
+        font-size: 12px;
+        min-width: 60px;
+    }
+
+    .portion-value,
+    .notes-value,
+    .satisfaction-value {
+        font-size: 12px;
+    }
+
+    .notes-value {
+        padding: 6px 8px;
+        border-radius: 6px;
+        margin-top: 2px;
+    }
+
+    .score-row-content {
+        gap: 6px;
+    }
+
+    .star-container {
+        gap: 2px;
+    }
+
+    .star-icon {
+        font-size: 13px;
+    }
+
+    .score-value {
+        font-size: 12px;
+        margin-left: 2px;
+    }
+
+    .state-container {
+        padding: 20px 8px;
+        font-size: 13px;
+    }
+
+    .no-data-state {
+        padding: 20px 8px;
+    }
+
+    .no-data-icon {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    .empty-message {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .footer {
+        font-size: 12px;
+        padding: 10px;
+        margin-top: 10px;
+    }
+}

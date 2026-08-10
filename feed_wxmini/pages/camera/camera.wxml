@@ -1,0 +1,9 @@
+<view class="wx-page">
+    <view class="wx-header">
+        <view class="wx-logo">实时影像</view>
+    </view>
+    <view class="wx-card">
+        <text class="main-title">实时监控</text>
+        <text class="sub-title">可在此查看宠物实时画面</text>
+    </view>
+</view>

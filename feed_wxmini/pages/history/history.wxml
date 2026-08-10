@@ -1,0 +1,112 @@
+<view class="wx-page">
+    <view class="wx-header">
+        <view
+            style="background: none; color: #2a73d9; font-weight: 800; font-size: 24px; padding-left: 0; -webkit-text-fill-color: initial;">
+            喂食记录历史</view>
+    </view>
+    <view class="wx-card">
+        <view class="statistics-container">
+            <view class="stat-item">
+                <view class="stat-value">{{statistics.today_count || 0}}</view>
+                <view class="stat-label">今日喂食</view>
+            </view>
+            <view class="stat-item">
+                <view class="stat-value">{{statistics.avg_score || '-'}}</view>
+                <view class="stat-label">平均评分</view>
+            </view>
+        </view>
+        <block wx:if="{{loading}}">
+            <view class="state-container loading-state">加载中...</view>
+        </block>
+        <block wx:if="{{error}}">
+            <view class="state-container error-state">{{error}}</view>
+        </block>
+        <block wx:if="{{feedings.length}}">
+            <view class="feeding-list">
+                <block wx:for="{{feedings}}" wx:key="record_id">
+                    <view class="feeding-item-card">
+                        <view class="feeding-item-header">
+                            <view class="person-icon">{{item.person_name && item.person_name[0]}}</view>
+                            <text class="person-name">{{item.person_name}}</text>
+                            <text class="feeding-time">{{item.feeding_time}}</text>
+                        </view>
+                        <view class="feeding-item-body">
+                            <view class="food-row">
+                                <view class="row-icon">
+                                    <image src="/icons/food.svg" class="sub-icon"></image><text
+                                        class="fa fa-utensils"></text>
+                                </view>
+                                <view class="row-content">
+                                    <view class="food-main">
+                                        <text class="food-name">{{item.food_name}}</text>
+                                        <!-- <text class="food-category-tag">{{item.food_category}}</text> -->
+                                    </view>
+                                    <!-- <text class="food-description">{{item.food_desc}}</text> -->
+                                </view>
+                            </view>
+                            <view class="location-row">
+                                <view class="row-icon">
+                                    <image src="/icons/order-location.svg" class="sub-icon"></image><text
+                                        class="fa fa-map-marker-alt"></text>
+                                </view>
+                                <view class="row-content">
+                                    <text class="location-name">{{item.location_name}}</text>
+                                </view>
+                            </view>
+                            <view class="portion-row">
+                                <view class="row-icon">
+                                    <image src="/icons/number.svg" class="sub-icon"></image><text
+                                        class="fa fa-weight"></text>
+                                </view>
+                                <view class="row-content">
+                                    <text class="portion-label">喂食量：</text>
+                                    <text class="portion-value">{{item.portion_size}}g</text>
+                                </view>
+                            </view>
+                            <view class="notes-row">
+                                <view class="row-icon">
+                                    <image src="/icons/address-book.svg" class="sub-icon"></image><text
+                                        class="fa fa-sticky-note"></text>
+                                </view>
+                                <view class="row-content">
+                                    <text class="notes-label">备注：</text>
+                                    <text class="notes-value">{{item.notes || '无'}}</text>
+                                </view>
+                            </view>
+                            <view class="score-row">
+                                <view class="row-icon">
+                                    <image src="/icons/score.svg" class="sub-icon"></image><text
+                                        class="fa fa-star"></text>
+                                </view>
+                                <view class="row-content score-row-content">
+                                    <text class="score-label">评分：</text>
+                                    <block wx:if="{{item.score}}">
+                                        <view class="star-container">
+                                            <block wx:for="{{[1,2,3,4,5]}}" wx:key="star">
+                                                <text class="star-icon {{item.score >= star ? 'active' : ''}}">★</text>
+                                            </block>
+                                        </view>
+                                        <text class="score-value">{{item.score}}分</text>
+                                    </block>
+                                    <block wx:else>
+                                        <text class="score-value">未评分</text>
+                                    </block>
+                                </view>
+                            </view>
+                            <!-- 满意度部分已删除 -->
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <block wx:if="{{!loading && !error && !feedings.length}}">
+            <view class="no-data-state">
+                <text class="no-data-icon">😿</text>
+                <text class="empty-message">暂无历史记录</text>
+            </view>
+        </block>
+    </view>
+    <view class="footer">
+        <text>| 最新同步：{{last_sync_time || '--:--:--'}}</text>
+    </view>
+</view>

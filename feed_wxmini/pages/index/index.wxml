@@ -1,0 +1,59 @@
+<!-- index.wxml -->
+<view class="wx-page">
+  <!-- 顶部区域 -->
+  <view class="wx-header">
+    <view class="wx-logo">智能喂养</view>
+  </view>
+
+  <!-- 主功能区网格布局 -->
+  <view class="wx-grid">
+    <!-- 主功能卡片 -->
+    <view class="wx-card main-card" bindtap="navigateToFeed">
+      <image src="/icons/arm_local.svg" class="main-icon"></image>
+      <text class="main-title">智能喂食</text>
+      <text class="sub-title">定时定量，科学喂养</text>
+    </view>
+
+    <!-- 副功能区 -->
+    <view class="sub-card-group">
+      <view class="wx-card sub-card" bindtap="navigateToHistory">
+        <image src="/icons/time-history.svg" class="sub-icon"></image>
+        <text class="sub-title">历史记录</text>
+      </view>
+      <view class="wx-card sub-card" bindtap="navigateToCamera">
+        <image src="/icons/camera.svg" class="sub-icon"></image>
+        <text class="sub-title">实时影像</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 推荐内容区域 -->
+  <view class="wx-card recommendations">
+    <view class="section-header">
+      <image src="/icons/address-book.svg" class="book-icon"></image>
+      <text class="section-title">个性化推荐</text>
+    </view>
+
+    <view class="recommendation-list">
+      <view class="recommendation-item" bindtap="navigateToArticle" data-id="1">
+        <view class="content">
+          <text class="item-title">Title</text>
+          <text class="item-desc"> Sub-title</text>
+        </view>
+        <text class="info">xxxx人阅读</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航栏 -->
+  <view class="wx-nav">
+    <view class="wx-nav-item active">
+      <image src="/icons/home.svg" class="nav-icon"></image>
+      <text class="nav-text">首页</text>
+    </view>
+    <view class="wx-nav-item" bindtap="navigateToProfile">
+      <image src="/icons/Profile.svg" class="nav-icon"></image>
+      <text class="nav-text">我的</text>
+    </view>
+  </view>
+</view>

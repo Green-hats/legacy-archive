@@ -1,0 +1,9 @@
+<view class="wx-page">
+    <view class="wx-header">
+        <view class="wx-logo">智能喂食</view>
+    </view>
+    <view class="wx-card main-card">
+        <text class="main-title">定时定量，科学喂养</text>
+        <text class="sub-title">请在此页面设置喂食计划</text>
+    </view>
+</view>

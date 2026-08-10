@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>喂食记录历史</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f4ff 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .wx-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        
+        .wx-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 28px;
+            position: relative;
+        }
+        
+        .wx-logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(to right, #2a73d9, #4d9dfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-left: 52px;
+        }
+        
+        .wx-logo::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 42px;
+            height: 42px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmE3M2Q5IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgICA8cGF0aCBkPSJNMyAxMmExMC45IDEwLjkgMCAxIDAgMTggMCAxMC45IDEwLjkgMCAxIDAtMTggMHptMTUuOTQgMC0yLjcgMy40NWExLjI4IDEuMjggMCAwIDEtMS45MS4xNGwtMi4xLTEuODZhMS4zIDEuMyAwIDAgMC0xLjQ5LS4wM2wtMi4xNSAxLjI3YTEuMjggMS4yOCAwIDAgMS0xLjczLS40OGwtMi4xLTMuNDUiLz4KICAgIDxwYXRoIGQ9Ik04LjU5IDcuNTJhLjY0LjY0IDAgMCAxIC4yNS44NGwtMS41Ni44N2EuNjQuNjQgMCAwIDEtLjg0LS4yNUw1LjkgNi42YS42NC42NCAwIDAgMSAuMjUtLjg0bDEuNTYtLjg3YS42NC42NCAwIDAgMSAuODQuMjVsLjg0IDEuNTZhLjY0LjY0IDAgMCAxLS4yNS44NE01LjUzIDEwLjZhLjY0LjY0IDAgMCAxIC4yNS44NGwtMS41Ni44N2EuNjQuNjQgMCAwIDEtLjg0LS4yNkwzIDkuNGwuMDItLjA0YS42NC42NCAwIDAgMSAuODQtLjI1bDEuNTYuODdhLjY0LjY0IDAgMCAxIC4yNS44NCIvPgo8L3N2Zz4=');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .filter-container {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .filter-btn:hover {
+            background: #f5f9ff;
+            border-color: #2a73d9;
+            color: #2a73d9;
+        }
+        
+        .wx-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(42, 115, 217, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        .statistics-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-top: 1px solid #f0f6ff;
+            border-bottom: 1px solid #f0f6ff;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0 20px;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2a73d9;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 15px;
+            color: #888;
+            font-weight: 500;
+        }
+        
+        .divider {
+            width: 1px;
+            background: #f0f6ff;
+            margin: 0 10px;
+        }
+        
+        .feeding-list {
+            margin-top: 15px;
+        }
+        
+        .feeding-item-card {
+            background: linear-gradient(135deg, #f9fbff 0%, #edf5ff 100%);
+            border-radius: 18px;
+            margin-bottom: 25px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(42, 115, 217, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e9f1ff;
+        }
+        
+        .feeding-item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #2a73d9, #4d9dfa);
+            border-radius: 6px 0 0 6px;
+        }
+        
+        .feeding-item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(42, 115, 217, 0.15);
+        }
+        
+        .feeding-item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(227, 240, 255, 0.7);
+        }
+        
+        .person-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(to bottom right, #2a73d9, #4d9dfa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+        
+        .person-name {
+            font-weight: 700;
+            color: #2a73d9;
+            font-size: 18px;
+            margin-right: 16px;
+        }
+        
+        .feeding-time {
+            font-size: 14px;
+            color: #888;
+            margin-left: auto;
+            background: rgba(42, 115, 217, 0.08);
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-weight: 500;
+        }
+        
+        .feeding-item-body {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .food-row,
+        .location-row,
+        .portion-row,
+        .notes-row,
+        .score-row,
+        .satisfaction-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .row-icon {
+            width: 24px;
+            height: 24px;
+            background: #e6f0ff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a73d9;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .row-content {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .food-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .food-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .food-category-tag {
+            background: linear-gradient(90deg, #e3f0ff 0%, #f9fbff 100%);
+            color: #2a73d9;
+            font-size: 13px;
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(42, 115, 217, 0.1);
+            border: 1px solid #e0eeff;
+        }
+        
+        .food-description {
+            color: #777;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 2px;
+        }
+        
+        .location-name {
+            color: #555;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .portion-label,
+        .notes-label,
+        .score-label,
+        .satisfaction-label {
+            color: #888;
+            font-size: 15px;
+            font-weight: 500;
+            min-width: 80px;
+        }
+        
+        .portion-value,
+        .notes-value,
+        .satisfaction-value {
+            color: #333;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .portion-value {
+            color: #2a73d9;
+            font-weight: 600;
+        }
+        
+        .notes-value {
+            background: rgba(240, 246, 255, 0.6);
+            padding: 10px 15px;
+            border-radius: 10px;
+            line-height: 1.5;
+            margin-top: 5px;
+        }
+        
+        /* 修复的评分星星布局 */
+        .score-row-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .star-container {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .star-icon {
+            font-size: 18px;
+            color: #ffc107;
+            text-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+        }
+        
+        .score-value {
+            color: #f5a623;
+            font-weight: 700;
+            font-size: 16px;
+            margin-left: 5px;
+        }
+        
+        .satisfaction-value {
+            background: linear-gradient(90deg, #2a73d9, #4d9dfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .state-container {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888;
+            font-size: 16px;
+        }
+        
+        .loading-state {
+            color: #2a73d9;
+        }
+        
+        .no-data-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+        }
+        
+        .no-data-icon {
+            font-size: 60px;
+            color: #d0dcec;
+            margin-bottom: 20px;
+        }
+        
+        .empty-message {
+            color: #aaa;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .record-btn {
+            background: linear-gradient(to right, #2a73d9, #4d9dfa);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(42, 115, 217, 0.3);
+        }
+        
+        .record-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(42, 115, 217, 0.4);
+        }
+        
+        .error-state {
+            color: #ff4d4f;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .wx-page {
+                padding: 10px;
+            }
+            
+            .wx-card {
+                padding: 20px;
+            }
+            
+            .wx-logo {
+                font-size: 24px;
+                padding-left: 40px;
+            }
+            
+            .wx-logo::before {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .statistics-container {
+                flex-direction: column;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .stat-item {
+                padding: 12px 0;
+            }
+            
+            .divider {
+                width: 100%;
+                height: 1px;
+                margin: 5px 0;
+            }
+            
+            .feeding-item-card {
+                padding: 20px 15px 20px 20px;
+            }
+            
+            .feeding-item-header {
+                flex-wrap: wrap;
+            }
+            
+            .feeding-time {
+                margin-top: 10px;
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wx-page">
+        <div class="wx-header">
+            <div class="wx-logo">喂食记录历史</div>
+            <div class="filter-container">
+                <button class="filter-btn"><i class="fas fa-filter"></i> 筛选</button>
+                <button class="filter-btn"><i class="fas fa-calendar-alt"></i> 日期</button>
+            </div>
+        </div>
+        
+        <div class="wx-card">
+            <div class="statistics-container">
+                <div class="stat-item">
+                    <div class="stat-value">128</div>
+                    <div class="stat-label">总喂食次数</div>
+                </div>
+                <div class="divider"></div>
+                <div class="stat-item">
+                    <div class="stat-value">36.8kg</div>
+                    <div class="stat-label">总喂食量</div>
+                </div>
+                <div class="divider"></div>
+                <div class="stat-item">
+                    <div class="stat-value">4.7</div>
+                    <div class="stat-label">平均评分</div>
+                </div>
+            </div>
+            
+            <div class="feeding-list">
+                <div class="feeding-item-card">
+                    <div class="feeding-item-header">
+                        <div class="person-icon">M</div>
+                        <div class="person-name">张三</div>
+                        <div class="feeding-time">2025年07月12日 10:30</div>
+                    </div>
+                    
+                    <div class="feeding-item-body">
+                        <div class="food-row">
+                            <div class="row-icon"><i class="fas fa-utensils"></i></div>
+                            <div class="row-content">
+                                <div class="food-main">
+                                    <div class="food-name">皇家幼犬粮（鸡肉味）</div>
+                                    <div class="food-category-tag">干粮</div>
+                                </div>
+                                <div class="food-description">适合幼犬，含丰富蛋白质和钙质</div>
+                            </div>
+                        </div>
+                        
+                        <div class="location-row">
+                            <div class="row-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="row-content">
+                                <div class="location-name">家里 - 客厅</div>
+                            </div>
+                        </div>
+                        
+                        <div class="portion-row">
+                            <div class="row-icon"><i class="fas fa-weight"></i></div>
+                            <div class="row-content">
+                                <div class="portion-label">喂食量：</div>
+                                <div class="portion-value">250g</div>
+                            </div>
+                        </div>
+                        
+                        <div class="notes-row">
+                            <div class="row-icon"><i class="fas fa-sticky-note"></i></div>
+                            <div class="row-content">
+                                <div class="notes-label">备注：</div>
+                                <div class="notes-value">食欲很好，15分钟内吃完全部食物，吃食后精神状态良好。</div>
+                            </div>
+                        </div>
+                        
+                        <div class="score-row">
+                            <div class="row-icon"><i class="fas fa-star"></i></div>
+                            <div class="row-content">
+                                <div class="score-label">评分：</div>
+                                <!-- 修复的评分星星布局 -->
+                                <div class="score-row-content">
+                                    <div class="star-container">
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star-half-alt star-icon"></i>
+                                    </div>
+                                    <div class="score-value">4.5分</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="satisfaction-row">
+                            <div class="row-icon"><i class="fas fa-smile"></i></div>
+                            <div class="row-content">
+                                <div class="satisfaction-label">满意度：</div>
+                                <div class="satisfaction-value">非常满意</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feeding-item-card">
+                    <div class="feeding-item-header">
+                        <div class="person-icon">L</div>
+                        <div class="person-name">李四</div>
+                        <div class="feeding-time">2025年07月11日 18:20</div>
+                    </div>
+                    
+                    <div class="feeding-item-body">
+                        <div class="food-row">
+                            <div class="row-icon"><i class="fas fa-utensils"></i></div>
+                            <div class="row-content">
+                                <div class="food-main">
+                                    <div class="food-name">进口三文鱼罐头</div>
+                                    <div class="food-category-tag">湿粮</div>
+                                </div>
+                                <div class="food-description">富含Omega-3，美毛护肤</div>
+                            </div>
+                        </div>
+                        
+                        <div class="location-row">
+                            <div class="row-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="row-content">
+                                <div class="location-name">宠物乐园</div>
+                            </div>
+                        </div>
+                        
+                        <div class="portion-row">
+                            <div class="row-icon"><i class="fas fa-weight"></i></div>
+                            <div class="row-content">
+                                <div class="portion-label">喂食量：</div>
+                                <div class="portion-value">180g</div>
+                            </div>
+                        </div>
+                        
+                        <div class="notes-row">
+                            <div class="row-icon"><i class="fas fa-sticky-note"></i></div>
+                            <div class="row-content">
+                                <div class="notes-label">备注：</div>
+                                <div class="notes-value">添加了维生素片和益生菌，吃完后喝了很多水。</div>
+                            </div>
+                        </div>
+                        
+                        <div class="score-row">
+                            <div class="row-icon"><i class="fas fa-star"></i></div>
+                            <div class="row-content">
+                                <div class="score-label">评分：</div>
+                                <div class="score-row-content">
+                                    <div class="star-container">
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="far fa-star star-icon"></i>
+                                    </div>
+                                    <div class="score-value">4.0分</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="satisfaction-row">
+                            <div class="row-icon"><i class="fas fa-smile"></i></div>
+                            <div class="row-content">
+                                <div class="satisfaction-label">满意度：</div>
+                                <div class="satisfaction-value">满意</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feeding-item-card">
+                    <div class="feeding-item-header">
+                        <div class="person-icon">Z</div>
+                        <div class="person-name">王五</div>
+                        <div class="feeding-time">2025年07月10日 08:45</div>
+                    </div>
+                    
+                    <div class="feeding-item-body">
+                        <div class="food-row">
+                            <div class="row-icon"><i class="fas fa-utensils"></i></div>
+                            <div class="row-content">
+                                <div class="food-main">
+                                    <div class="food-name">营养膳食（自制）</div>
+                                    <div class="food-category-tag">自制餐</div>
+                                </div>
+                                <div class="food-description">鸡胸肉、西兰花、胡萝卜、米饭</div>
+                            </div>
+                        </div>
+                        
+                        <div class="location-row">
+                            <div class="row-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="row-content">
+                                <div class="location-name">家里 - 厨房</div>
+                            </div>
+                        </div>
+                        
+                        <div class="portion-row">
+                            <div class="row-icon"><i class="fas fa-weight"></i></div>
+                            <div class="row-content">
+                                <div class="portion-label">喂食量：</div>
+                                <div class="portion-value">300g</div>
+                            </div>
+                        </div>
+                        
+                        <div class="notes-row">
+                            <div class="row-icon"><i class="fas fa-sticky-note"></i></div>
+                            <div class="row-content">
+                                <div class="notes-label">备注：</div>
+                                <div class="notes-value">食材比例：70%肉类，20%蔬菜，10%碳水化合物。狗狗很喜欢。</div>
+                            </div>
+                        </div>
+                        
+                        <div class="score-row">
+                            <div class="row-icon"><i class="fas fa-star"></i></div>
+                            <div class="row-content">
+                                <div class="score-label">评分：</div>
+                                <div class="score-row-content">
+                                    <div class="star-container">
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                        <i class="fas fa-star star-icon"></i>
+                                    </div>
+                                    <div class="score-value">5.0分</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="satisfaction-row">
+                            <div class="row-icon"><i class="fas fa-smile"></i></div>
+                            <div class="row-content">
+                                <div class="satisfaction-label">满意度：</div>
+                                <div class="satisfaction-value">非常满意</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 宠物喂食记录系统 | 最新同步：17:28:50</p>
+        </div>
+    </div>
+
+    <script>
+        // 示例JS功能 - 在真实项目中添加交互逻辑
+        document.querySelectorAll('.record-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('开始添加新的喂食记录');
+            });
+        });
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
