@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Anime List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div style="position:absolute;right:24px;top:18px;z-index:200;">
+            <button id="theme-toggle-btn" class="btn btn-secondary"
+                style="padding:6px 16px;font-size:1em;">切换黑白</button>
+        </div>
+        <div class="nav-bar">
+            <a href="#" class="logo" id="home-link">
+                <i class="fas fa-play-circle"></i>
+                <span>My Anime List</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="home-page" class="page active">
+            <div id="loading-indicator" class="loader-container">
+                <div class="loader"></div>
+            </div>
+            <div id="anime-list" class="anime-list"></div>
+        </div>
+    </div>
+    <script>
+        // 主题切换逻辑
+        function setTheme(theme) {
+            document.body.classList.remove('theme-dark', 'theme-light');
+            document.body.classList.add(theme === 'light' ? 'theme-light' : 'theme-dark');
+            localStorage.setItem('theme', theme);
+        }
+        function toggleTheme() {
+            const current = document.body.classList.contains('theme-light') ? 'light' : 'dark';
+            setTheme(current === 'light' ? 'dark' : 'light');
+        }
+        window.addEventListener('DOMContentLoaded', function () {
+            const btn = document.getElementById('theme-toggle-btn');
+            if (btn) btn.onclick = toggleTheme;
+            // 初始化主题
+            const saved = localStorage.getItem('theme');
+            setTheme(saved === 'light' ? 'light' : 'dark');
+        });
+    </script>
+    <script src="app.js"></script>
+</body>
+
+</html>
