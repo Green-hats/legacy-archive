@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}番剧库 - AniVault{% endblock %}
+{% block content %}
+{% if mappings %}
+<div style="margin-bottom:16px;">
+  <input type="text" id="filterInput" placeholder="过滤番剧..." style="width:100%;max-width:400px;">
+</div>
+<div class="grid" id="cardGrid">
+{% for m in mappings %}
+  <a href="/show/{{ m.id }}" class="card" data-title="{{ m.title_cn }} {{ m.title_jp }}">
+    {% if m.image_url %}<img src="{{ m.image_url }}" alt="" loading="lazy">{% endif %}
+    <div class="card-body">
+      <div class="card-title">{{ m.title_cn or m.title_jp }}</div>
+      <div class="card-meta">
+        {% if m.rating %}⭐ {{ m.rating }} {% endif %}
+        {% if m.total_episodes %}{{ m.total_episodes }}话 {% endif %}
+        {% if m.date %}{{ m.date[:4] }}{% endif %}
+      </div>
+    </div>
+  </a>
+{% endfor %}
+</div>
+{% else %}
+<div class="empty">
+  <p style="font-size:48px;margin-bottom:12px;">📺</p>
+  <p style="font-size:18px;margin-bottom:8px;">还没有番剧</p>
+  <a href="/manage" class="btn">添加番剧</a>
+</div>
+{% endif %}
+<script>
+let filterTimer;
+document.getElementById('filterInput').addEventListener('input', function() {
+  clearTimeout(filterTimer);
+  filterTimer = setTimeout(() => {
+    const q = this.value.toLowerCase();
+    document.querySelectorAll('#cardGrid .card').forEach(c => {
+      c.style.display = c.dataset.title.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }, 200);
+});
+</script>
+{% endblock %}

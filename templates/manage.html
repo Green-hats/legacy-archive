@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% block title %}管理 - AniVault{% endblock %}
+{% block content %}
+
+<h2 style="margin-bottom:16px;">管理番剧关联</h2>
+
+<div class="manage-layout">
+  <div>
+    <div class="section-title">搜索 Bangumi</div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="输入番剧名..." onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="btn" onclick="doSearch()">搜索</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <button class="btn" id="addBtn" onclick="openAddModal()" style="display:none;">+ 添加关联</button>
+  </div>
+
+  <div>
+    <div class="section-title" id="mappingCount">已关联的番剧</div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;">
+      <a href="/api/export" class="btn btn-sm">导出 JSON</a>
+      <label class="btn btn-sm" style="cursor:pointer;">
+        导入 JSON
+        <input type="file" accept=".json" onchange="importFile(this)" style="display:none;">
+      </label>
+    </div>
+    <div id="mappingList">加载中...</div>
+  </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>添加关联</h3>
+    <div id="modalStep1">
+      <p style="margin-bottom:8px;">已选择: <strong id="selectedSubjectText"></strong></p>
+    </div>
+    <div style="margin:12px 0;">
+      <label style="font-size:13px;color:#666;display:block;margin-bottom:4px;">本地路径</label>
+      <input type="text" id="folderPath" placeholder="/path/to/anime/folder">
+      <button class="btn btn-outline btn-sm" style="margin-top:6px;" onclick="browseFolder()">浏览...</button>
+    </div>
+    <div class="folder-browser" id="folderBrowser" style="display:none;"></div>
+    <div style="margin:12px 0;">
+      <label style="font-size:13px;color:#666;display:block;margin-bottom:4px;">匹配正则（可选，捕获组1=集号，如 S\d+E(\d+)）</label>
+      <input type="text" id="regexPattern" placeholder="留空=自动匹配" style="width:100%;">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn" id="confirmBtn" onclick="doAdd()">确认添加</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedSubject = null;
+let selectedFolder = null;
+
+let allMappings = [];
+let mappingPage = 0;
+
+async function loadMappings() {
+  const res = await fetch('/api/mappings');
+  allMappings = await res.json();
+  renderMappings();
+}
+
+function renderMappings() {
+  const total = allMappings.length;
+  document.getElementById('mappingCount').textContent = `已关联的番剧 (${total})`;
+  const el = document.getElementById('mappingList');
+
+  if (total === 0) {
+    el.innerHTML = '<p style="color:#999;font-size:13px;">还没有关联</p>';
+    return;
+  }
+
+  const start = mappingPage * PAGE_SIZE;
+  const page = allMappings.slice(start, start + PAGE_SIZE);
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  let html = page.map(m => `
+    <div class="mapping-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+        <span>${esc(m.title_cn||m.title_jp||'未知')} <a href="/show/${m.id}">查看</a></span>
+          <button class="btn-danger" data-id="${m.id}" data-name="${(m.title_cn||m.title_jp).replace(/"/g,'&quot;')}" onclick="deleteMapping(this.dataset.id,this.dataset.name)">✕</button>
+      </div>
+      <div style="font-size:12px;color:#999;">${esc(m.folder_path)}</div>
+      <div style="font-size:12px;color:#666;display:flex;gap:8px;align-items:center;">
+          匹配规则: ${m.regex_pattern ? '<code>'+esc(m.regex_pattern)+'</code>' : '<span style="color:#999;">自动</span>'}
+          <a href="#" onclick="editRegex(${m.id},${JSON.stringify(m.regex_pattern||'')});return false" style="font-size:12px;">修改</a>
+      </div>
+    </div>
+  `).join('');
+
+  if (totalPages > 1) {
+    html += `<div style="display:flex;justify-content:center;gap:12px;margin-top:8px;font-size:13px;">`;
+    if (mappingPage > 0) html += `<a href="#" onclick="mappingPage--;renderMappings();return false">◀ 上一页</a>`;
+    html += `<span style="color:#999;">${mappingPage+1} / ${totalPages}</span>`;
+    if (mappingPage < totalPages - 1) html += `<a href="#" onclick="mappingPage++;renderMappings();return false">下一页 ▶</a>`;
+    html += `</div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+let searchResults = [];
+let searchPage = 0;
+const PAGE_SIZE = 5;
+
+function renderSearchPage() {
+  const el = document.getElementById('searchResults');
+  const start = searchPage * PAGE_SIZE;
+  const page = searchResults.slice(start, start + PAGE_SIZE);
+  const totalPages = Math.ceil(searchResults.length / PAGE_SIZE);
+
+  let html = page.map(item => `
+    <div class="search-result${item.id===selectedSubject?' selected':''}" onclick="pickSubject(${item.id}, this)">
+      <img src="${item.image||''}" alt="" onerror="this.style.visibility='hidden'" loading="lazy">
+      <div class="sr-info">
+        <div class="sr-name">${esc(item.name)}</div>
+        <div class="sr-cn">${esc(item.name_cn)}</div>
+        <div class="sr-score">⭐ ${item.score||'—'}</div>
+      </div>
+    </div>
+  `).join('');
+
+  if (totalPages > 1) {
+    html += `<div style="display:flex;justify-content:center;gap:12px;margin-top:8px;font-size:13px;">`;
+    if (searchPage > 0) html += `<a href="#" onclick="searchPage--;renderSearchPage();return false">◀ 上一页</a>`;
+    html += `<span style="color:#999;">${searchPage+1} / ${totalPages}</span>`;
+    if (searchPage < totalPages - 1) html += `<a href="#" onclick="searchPage++;renderSearchPage();return false">下一页 ▶</a>`;
+    html += `</div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+async function doSearch() {
+  const q = document.getElementById('searchInput').value.trim();
+  if (!q) return;
+  const el = document.getElementById('searchResults');
+  el.innerHTML = '<p style="color:#999;">搜索中...</p>';
+  try {
+    const res = await fetch(`/api/bangumi/search?q=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    if (data.error) { el.innerHTML = '<p style="color:#e00;">'+data.error+'</p>'; return; }
+    if (!data.length) { el.innerHTML = '<p style="color:#999;">无结果</p>'; return; }
+    searchResults = data;
+    searchPage = 0;
+    renderSearchPage();
+  } catch(e) { el.innerHTML = '<p style="color:red;">请求失败</p>'; }
+}
+
+async function pickSubject(id, el) {
+  selectedSubject = id;
+  document.getElementById('addBtn').style.display = 'inline-block';
+  renderSearchPage();
+  try {
+    const res = await fetch(`/api/bangumi/subject/${id}`);
+    const s = await res.json();
+    document.getElementById('selectedSubjectText').textContent = (s.name_cn||s.name||'') + ' (ID:' + id + ')';
+  } catch(e) {}
+}
+
+function openAddModal() {
+  if (!selectedSubject) { alert('请先搜索并选择番剧'); return; }
+  selectedFolder = null;
+  document.getElementById('folderPath').value = '';
+  document.getElementById('regexPattern').value = '';
+  document.getElementById('folderBrowser').style.display = 'none';
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+async function browseFolder() {
+  let path = document.getElementById('folderPath').value.trim();
+  if (!path) path = {{ default_path | tojson }};
+  document.getElementById('folderPath').value = path;
+  const browser = document.getElementById('folderBrowser');
+  browser.style.display = 'block';
+  browser.innerHTML = '<p style="color:#999;font-size:12px;">扫描中...</p>';
+  try {
+    const res = await fetch(`/api/scan?path=${encodeURIComponent(path)}`);
+    const data = await res.json();
+    if (data.error) { browser.innerHTML = '<p style="color:red;">'+data.error+'</p>'; return; }
+    const parent = path.split('/').slice(0,-1).join('/')||'/';
+    let html = '<div class="breadcrumb">';
+    const parts = path.split('/').filter(Boolean);
+    let cum = '';
+    html += '<a onclick="navigateTo(\'/\')">/</a>';
+    parts.forEach((p,i)=>{cum+='/'+p;html+=`<a onclick="navigateTo('${cum}')">${esc(p)}</a>${i<parts.length-1?' / ':''}`;});
+    html += '</div>';
+    if(path!=='/') html+=`<div class="folder-entry" onclick="navigateTo('${parent}')">📂 ..</div>`;
+    data.forEach(e=>{
+      const icon = e.type==='folder'?'📁':'🎬';
+      if (e.type === 'folder') {
+        const safe = e.path.replace(/'/g,"\\'").replace(/\\/g,"\\\\");
+        html+=`<div class="folder-entry" onclick="navigateTo('${safe}')">${icon} ${esc(e.name)}</div>`;
+      } else {
+        html+=`<div class="folder-entry" onclick="pickFolder.call(this)" data-path="${e.path.replace(/"/g,'&quot;')}">${icon} ${esc(e.name)}</div>`;
+      }
+    });
+    browser.innerHTML = html;
+  } catch(e) { browser.innerHTML = '<p style="color:red;">扫描失败</p>'; }
+}
+
+function navigateTo(p) { document.getElementById('folderPath').value=p; browseFolder(); }
+function pickFolder() {
+  const path = this.dataset.path;
+  document.getElementById('folderPath').value = path;
+  selectedFolder = path;
+}
+
+async function doAdd() {
+  const folderPath = document.getElementById('folderPath').value.trim();
+  const fp = selectedFolder || folderPath;
+  if (!selectedSubject || !fp) { alert('请选择番剧和本地路径'); return; }
+  try {
+    const subRes = await fetch(`/api/bangumi/subject/${selectedSubject}`);
+    const sub = await subRes.json();
+    const body = {
+      bangumi_id: selectedSubject,
+      title_cn: sub.name_cn || sub.name || '',
+      title_jp: sub.name || '',
+      image_url: sub.image || '',
+      rating: sub.rating || 0,
+      total_episodes: sub.total_episodes || 0,
+      platform: sub.platform || '',
+      date: sub.date || '',
+      summary: sub.summary || '',
+      tags: sub.tags || [],
+      folder_path: fp,
+      regex_pattern: document.getElementById('regexPattern').value.trim(),
+    };
+    const res = await fetch('/api/mappings', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if (res.status===409) { alert('该路径已关联到其他番剧'); return; }
+    if (!res.ok) throw new Error('失败');
+    closeModal();
+    mappingPage = 0;
+    loadMappings();
+  } catch(e) { alert('添加失败: '+e.message); }
+}
+
+async function deleteMapping(id, name) {
+  if (!confirm(`确定删除「${name}」？`)) return;
+  await fetch(`/api/mappings/${id}`, {method:'DELETE'});
+  const totalPages = Math.ceil(allMappings.length / PAGE_SIZE);
+  if (mappingPage >= totalPages - 1) mappingPage = Math.max(0, totalPages - 2);
+  loadMappings();
+}
+
+function editRegex(id, current) {
+  const p = prompt('输入自定义正则（留空=自动）:', current || '');
+  if (p === null) return;
+  fetch(`/api/mappings/${id}/regex`, {
+    method:'PUT', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({pattern: p.trim()})
+  }).then(() => loadMappings());
+}
+
+function esc(s) { if(!s)return''; const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+async function importFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!confirm(`确定导入 ${file.name}？`)) { input.value = ''; return; }
+  const form = new FormData();
+  form.append('file', file);
+  try {
+    const res = await fetch('/api/import', {method:'POST', body: form});
+    const data = await res.json();
+    alert(`完成。新增 ${data.added}，跳过 ${data.skipped}（共 ${data.total}）`);
+    loadMappings();
+  } catch(e) {
+    alert('导入失败: ' + e.message);
+  }
+  input.value = '';
+}
+
+loadMappings();
+</script>
+
+{% endblock %}
