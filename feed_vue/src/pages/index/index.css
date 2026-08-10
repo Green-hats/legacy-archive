@@ -1,0 +1,234 @@
+/* index.css - 由小程序 index.wxss 迁移 */
+
+
+.wx-page {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #eaf3ff 0%, #f5f7fa 100%);
+    padding: 0 0 80px 0;
+}
+
+.wx-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2.5em 2em 1em 2em;
+}
+
+.wx-logo {
+    font-size: 2.2em;
+    font-weight: 800;
+    color: var(--primary-color);
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px #e0e3e8;
+}
+
+.wx-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    padding: 0 2em;
+    margin-bottom: 2em;
+}
+
+.main-card {
+    flex: 2 1 auto;
+    min-width: 180px;
+    min-height: 120px;
+    background: linear-gradient(135deg, #3a7afe 60%, #6ab1f7 100%);
+    color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 24px 0 rgba(58, 122, 254, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2em 1em;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition), max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 400px;
+    height: auto;
+    overflow: hidden;
+}
+
+.main-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 32px 0 rgba(58, 122, 254, 0.18);
+    max-height: 600px;
+}
+
+.main-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1em;
+}
+
+.main-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.sub-title {
+    font-size: 1em;
+    color: #1564cc;
+}
+
+.sub-card-group {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    min-height: 60px;
+    max-height: 500px;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.sub-card-group:hover {
+    max-height: 800px;
+}
+
+.sub-card {
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 1.2em 1em;
+    cursor: pointer;
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.sub-card:hover {
+    box-shadow: 0 4px 24px 0 rgba(58, 122, 254, 0.10);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.sub-icon {
+    width: 32px;
+    height: 32px;
+}
+
+/* 推荐内容区 */
+.recommendations {
+    margin: 2em 2em 0 2em;
+    padding: 1.5em 1em;
+    border-radius: var(--border-radius);
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.04);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+
+.book-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.section-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.recommendation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.recommendation-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f5f7fa;
+    border-radius: var(--border-radius);
+    padding: 1em 1.2em;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.recommendation-item:hover {
+    background: #eaf3ff;
+}
+
+.item-title {
+    font-weight: 600;
+    color: #222;
+}
+
+.item-desc {
+    color: #888;
+    margin-left: 0.5em;
+}
+
+.info {
+    color: #3a7afe;
+    font-size: 0.95em;
+}
+
+/* 底部导航栏 */
+.wx-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 64px;
+    background: #fff;
+    box-shadow: 0 -2px 12px 0 rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 100;
+}
+
+.wx-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: color var(--transition);
+}
+
+.wx-nav-item.active,
+.wx-nav-item:hover {
+    color: var(--primary-color);
+}
+
+.nav-icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 0.2em;
+}
+
+.nav-text {
+    font-size: 0.95em;
+}
+
+.wx-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.wx-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+/* ...existing code... */
+
+/* 其余样式已完整迁移，详见原 index.wxss */
