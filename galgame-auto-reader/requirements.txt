@@ -1,0 +1,17 @@
+# 运行所需主要第三方依赖（最小集）
+pyautogui
+pyperclip
+keyboard
+pywin32
+
+# 可选：pyautogui 会自动依赖以下，如需显式锁定可取消注释
+# pillow
+# mouseinfo
+# pyscreeze
+# pygetwindow
+# pymsgbox
+
+# 打包阶段工具（运行时不必打包进去，可在单独环境安装）
+# nuitka
+# zstandard
+# pyinstaller-hooks-contrib
