@@ -149,7 +149,7 @@ func Group(bgmId string) []model.AnimeGardenGroup {
 			continue
 		}
 		seen[string(fansub.ID)] = true
-		name := strings.ReplaceAll(fansub.Name, "&", "%26")
+		name := url.QueryEscape(fansub.Name)
 		groupItems := groupByFansub[string(fansub.ID)]
 		group := model.AnimeGardenGroup{
 			ID:    string(fansub.ID),

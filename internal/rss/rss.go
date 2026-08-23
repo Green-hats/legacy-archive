@@ -61,6 +61,7 @@ func GetRSS(rawURL string) (string, error) {
 	if timeout <= 0 {
 		timeout = 20
 	}
+	rawURL = normalizeURL(rawURL)
 	req, err := util.NewRequest("GET", rawURL)
 	if err != nil {
 		return "", err
@@ -88,6 +89,20 @@ func GetRSS(rawURL string) (string, error) {
 		return "", errors.New("xml error")
 	}
 	return body, nil
+}
+
+// normalizeURL percent-encodes the query so that unencoded characters in
+// user-entered RSS urls (e.g. Chinese fansub names) are sent correctly.
+func normalizeURL(rawURL string) string {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return rawURL
+	}
+	if q := u.Query(); len(q) > 0 {
+		u.RawQuery = q.Encode()
+		return u.String()
+	}
+	return rawURL
 }
 
 // GetItems aggregates main + standby RSS items for an ani, sorted by episode.
