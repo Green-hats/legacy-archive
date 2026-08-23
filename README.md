@@ -4,26 +4,24 @@
 >
 > **定位**:基于 **ani-rss** 的精简版:后端 Go 重写,前端按"网盘下载 + 外置播放器播放"定制,砍掉本地 BT 客户端、在线播放、合集、捐赠等非网盘场景功能。
 
-## 特性
+## 核心特性
 
-**下载**
-- 115 云端离线下载(浏览器 Cookie 登录),自动重试、延迟下载、失败重试、备用 RSS 多源
+| 能力 | 说明 |
+|---|---|
+| **云端追番,不占硬盘** | RSS 自动离线下载到 115 网盘,本地零存储 |
+| **外置播放器直连** | 一键跳转 PotPlayer / VLC / MPV 等直接播放,云端文件流式反代 |
+| **一条龙自动化** | 追番 → 刮削 → 缺集/摸鱼检测 → 通知 |
 
-**播放**
-- 全部走外置播放器跳转:PotPlayer / VLC / IINA / MPV / Infuse / 弹弹Play / AnimacX / SenPlayer
-- 云端文件经 `/api/file` 流式反代,支持 Range/seek
+## 特性一览
 
-**追番**
-- RSS 抓取、剧集提取、重命名模板、缺集/摸鱼检测与通知、备用 RSS
-
-**刮削**
-- TMDB(NFO/poster/fanart)、Bangumi 搜索/评分/OAuth;Mikan / ani-bt / anime-garden 番剧源
-
-**通知**
-- Telegram / Bark / ServerChan / WebHook / Shell / 邮件 / Emby 媒体库刷新
-
-**安全**
-- 登录鉴权、IP 白名单、反向代理信任列表
+| 分类 | 能力 |
+|---|---|
+| 下载 | 115 云端离线下载(浏览器 Cookie),自动重试 / 延迟下载 / 失败重试 / 备用 RSS 多源 |
+| 播放 | 全部外置播放器跳转(PotPlayer / VLC / IINA / MPV / Infuse / 弹弹Play / AnimacX / SenPlayer),支持 Range/seek |
+| 追番 | RSS 抓取、剧集提取、重命名模板、备用 RSS |
+| 刮削 | TMDB(NFO/poster/fanart)、Bangumi 搜索/评分/OAuth;Mikan / ani-bt / anime-garden 番剧源 |
+| 通知 | Telegram / Bark / ServerChan / WebHook / Shell / 邮件 / Emby 刷新 |
+| 安全 | 登录鉴权、IP 白名单、反向代理信任列表 |
 
 ## 快速开始
 
