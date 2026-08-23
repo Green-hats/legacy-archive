@@ -87,10 +87,6 @@ func SenderFor(t model.NotificationTypeEnum) Sender {
 		return &Mail{}
 	case model.NotifyEmbyRefresh:
 		return &EmbyRefresh{}
-	case model.NotifyFileMove:
-		return &FileMove{}
-	case model.NotifyOpenListUpload:
-		return &OpenListUpload{}
 	}
 	return nil
 }

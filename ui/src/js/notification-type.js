@@ -30,14 +30,6 @@ export let notificationTypeList = [
     {
         name: 'SHELL',
         label: '执行外部程序'
-    },
-    {
-        name: 'FILE_MOVE',
-        label: '文件移动'
-    },
-    {
-        name: 'OPEN_LIST_UPLOAD',
-        label: 'OpenList上传'
     }
 ]
 

@@ -111,9 +111,5 @@ func SaveTorrent(ani *model.Ani, item *model.Item) string {
 
 // AllowDelete decides whether a finished torrent can be deleted.
 func AllowDelete(t *model.TorrentsInfo) bool {
-	cfg := config.Get()
-	if cfg.AwaitStalledUP {
-		return t.State == model.StateStoppedUP
-	}
 	return t.Finished()
 }

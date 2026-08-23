@@ -50,16 +50,6 @@ func (s *Server) handleClearCache(w http.ResponseWriter, r *http.Request) {
 	okMsg(w, msg)
 }
 
-// handleTrackersUpdate processes POST /api/trackersUpdate.
-func (s *Server) handleTrackersUpdate(w http.ResponseWriter, r *http.Request) {
-	var body model.Config
-	if !readJSONOrFail(w, r, &body) {
-		return
-	}
-	go service.UpdateTrackers(&body)
-	ok(w, nil)
-}
-
 // handleTestProxy processes POST /api/testProxy.
 func (s *Server) handleTestProxy(w http.ResponseWriter, r *http.Request) {
 	rawURL := r.URL.Query().Get("url")

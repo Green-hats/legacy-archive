@@ -15,9 +15,6 @@
     <el-collapse-item name="rss" title="RSS设置">
       <rss :config="props.config"/>
     </el-collapse-item>
-    <el-collapse-item name="trackers" title="Trackers">
-      <trackers :config="props.config"/>
-    </el-collapse-item>
     <el-collapse-item name="bangumi" title="Bangumi">
       <bangumi :config="props.config"/>
     </el-collapse-item>
@@ -36,7 +33,6 @@ import Page from "@/config/basic/Page.vue";
 import Add from "@/config/basic/Add.vue";
 import Rename from "@/config/basic/Rename.vue";
 import Rss from "@/config/basic/Rss.vue";
-import Trackers from "@/config/basic/Trackers.vue";
 import Other from "@/config/basic/Other.vue";
 import Bangumi from "@/config/basic/Bangumi.vue";
 import Backup from "./basic/Backup.vue";

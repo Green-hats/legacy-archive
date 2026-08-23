@@ -109,15 +109,12 @@ type Ani struct {
 	DownloadNew                   bool         `json:"downloadNew"`
 	NotDownload                   []float64    `json:"notDownload"`
 	Tmdb                          *Tmdb        `json:"tmdb"`
-	Upload                        bool         `json:"upload"`
 	Procrastinating               bool         `json:"procrastinating"`
 	CustomRenameTemplateEnable    bool         `json:"customRenameTemplateEnable"`
 	CustomRenameTemplate          string       `json:"customRenameTemplate"`
 	CustomPriorityKeywordsEnable  bool         `json:"customPriorityKeywordsEnable"`
 	CustomPriorityKeywords        []string     `json:"customPriorityKeywords"`
 	LastDownloadTime              int64        `json:"lastDownloadTime"`
-	CustomUploadEnable            bool         `json:"customUploadEnable"`
-	CustomUploadPathTarget        string       `json:"customUploadPathTarget"`
 	Message                       bool         `json:"message"`
 	Completed                     bool         `json:"completed"`
 	CustomCompleted               bool         `json:"customCompleted"`
@@ -168,7 +165,6 @@ func DefaultAni() *Ani {
 		Omit:                     true,
 		DownloadNew:              false,
 		NotDownload:              []float64{},
-		Upload:                   true,
 		Procrastinating:          true,
 		CustomRenameTemplate:     "[${subgroup}] ${title} S${seasonFormat}E${episodeFormat}",
 		Message:                  true,

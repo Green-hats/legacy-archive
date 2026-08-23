@@ -20,15 +20,6 @@
         </div>
       </div>
     </el-form-item>
-    <el-form-item label="延迟">
-      <el-input-number v-model="notificationConfig['embyDelayed']"
-                       class="notification-input-width"
-                       :min="0">
-        <template #suffix>
-          <span>秒</span>
-        </template>
-      </el-input-number>
-    </el-form-item>
   </template>
 </template>
 

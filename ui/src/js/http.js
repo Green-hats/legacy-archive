@@ -256,13 +256,6 @@ export let scrape = (force, ani) => api.post(`api/scrape?force=${force}`, ani)
 export let meBgm = (ani) => api.post('api/meBgm', ani)
 
 /**
- * 更新trackers
- * @param config 设置
- * @returns {Promise<unknown>}
- */
-export let trackersUpdate = (config) => api.post('api/trackersUpdate', config)
-
-/**
  * 获取Emby媒体库
  * @param config 设置
  * @returns {Promise<unknown>}

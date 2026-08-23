@@ -32,8 +32,6 @@
         <WebhookNotification v-model:notification-config="notificationConfig" v-model:config="props.config"/>
         <SystemNotification v-model:notification-config="notificationConfig" v-model:config="props.config"/>
         <ShellNotification v-model:notification-config="notificationConfig" v-model:config="props.config"/>
-        <FileMoveNotification v-model:notification-config="notificationConfig" v-model:config="props.config"/>
-        <OpenListUploadNotification v-model:config="props.config" v-model:notification-config="notificationConfig"/>
         <el-form-item label="顺序">
           <div>
             <el-input-number
@@ -75,8 +73,6 @@ import ShellNotification from "@/config/notification/ShellNotification.vue";
 import SystemNotification from "@/config/notification/SystemNotification.vue";
 import {notificationTypeList} from "@/js/notification-type.js";
 import {ElMessage} from "element-plus";
-import FileMoveNotification from "@/config/notification/FileMoveNotification.vue";
-import OpenListUploadNotification from "@/config/notification/OpenListUploadNotification.vue";
 import {testNotification} from "@/js/http.js";
 import BarkNotification from "@/config/notification/BarkNotification.vue";
 
@@ -96,7 +92,6 @@ let notificationConfig = ref({
   "serverChanType": "SERVER_CHAN",
   "serverChanSendKey": "",
   "serverChan3ApiUrl": "",
-  "serverChanTitleAction": true,
   "telegramBotToken": "",
   "telegramChatId": "",
   "telegramTopicId": -1,
@@ -108,7 +103,6 @@ let notificationConfig = ref({
   "webHookBody": "",
   "embyApiKey": "",
   "embyRefreshViewIds": [],
-  "embyDelayed": 0,
   "statusList": [
     "DOWNLOAD_START",
     "OMIT",
@@ -122,7 +116,6 @@ const messageTest = () => {
   messageTestLoading.value = true
 
   let config = JSON.parse(JSON.stringify(notificationConfig.value))
-  config.embyDelayed = 0
 
   testNotification(config)
       .then(res => {

@@ -4,18 +4,15 @@ import (
 	"net/http"
 	"strconv"
 
-	"ani-rss/internal/config"
 	"ani-rss/internal/model"
 	"ani-rss/internal/util"
 )
 
 // handleAbout processes POST /api/about (版本信息,不检查更新).
 func (s *Server) handleAbout(w http.ResponseWriter, r *http.Request) {
-	cfg := config.Get()
 	ok(w, &model.About{
-		Version:    util.Version,
-		AutoUpdate: cfg.AutoUpdate,
-		Date:       model.DateTime(model.Now()),
+		Version: util.Version,
+		Date:    model.DateTime(model.Now()),
 	})
 }
 

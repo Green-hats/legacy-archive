@@ -38,8 +38,6 @@ const (
 	NotifyTelegram        NotificationTypeEnum = "TELEGRAM"
 	NotifyWebHook         NotificationTypeEnum = "WEB_HOOK"
 	NotifyShell           NotificationTypeEnum = "SHELL"
-	NotifyFileMove        NotificationTypeEnum = "FILE_MOVE"
-	NotifyOpenListUpload  NotificationTypeEnum = "OPEN_LIST_UPLOAD"
 	NotifyBark            NotificationTypeEnum = "BARK"
 )
 
@@ -69,7 +67,6 @@ type NotificationConfig struct {
 	ServerChanType         ServerChanTypeEnum     `json:"serverChanType"`
 	ServerChanSendKey      string                 `json:"serverChanSendKey"`
 	ServerChan3ApiUrl      string                 `json:"serverChan3ApiUrl"`
-	ServerChanTitleAction  string                 `json:"serverChanTitleAction"`
 	TelegramBotToken       string                 `json:"telegramBotToken"`
 	TelegramChatId         string                 `json:"telegramChatId"`
 	TelegramTopicId        int                    `json:"telegramTopicId"`
@@ -83,19 +80,7 @@ type NotificationConfig struct {
 	EmbyHost               string                 `json:"embyHost"`
 	EmbyApiKey             string                 `json:"embyApiKey"`
 	EmbyRefreshViewIds     string                 `json:"embyRefreshViewIds"`
-	EmbyDelayed            int                    `json:"embyDelayed"`
 	Shell                  string                 `json:"shell"`
-	AliveLimit             int                    `json:"aliveLimit"`
-	FileMoveTarget         string                 `json:"fileMoveTarget"`
-	FileMoveOvaTarget      string                 `json:"fileMoveOvaTarget"`
-	FileMoveDeleteOldEp    bool                   `json:"fileMoveDeleteOldEpisode"`
-	FileMoveCopyModel      bool                   `json:"fileMoveCopyModel"`
-	OpenListUploadHost     string                 `json:"openListUploadHost"`
-	OpenListUploadApiKey   string                 `json:"openListUploadApiKey"`
-	OpenListUploadPath     string                 `json:"openListUploadPath"`
-	OpenListUploadOvaPath  string                 `json:"openListUploadOvaPath"`
-	OpenListUploadDelLocal bool                   `json:"openListUploadDeleteLocalFile"`
-	OpenListUploadDelOldEp  bool                  `json:"openListUploadDeleteOldEpisode"`
 	BarkServerUrl          string                 `json:"barkServerUrl"`
 	BarkDeviceKeys         string                 `json:"barkDeviceKeys"`
 	BarkGroup              string                 `json:"barkGroup"`
@@ -134,9 +119,6 @@ type Config struct {
 	Pan115Cookie                     string                `json:"pan115Cookie"`
 	DownloadPathTemplate             string                `json:"downloadPathTemplate"`
 	OvaDownloadPathTemplate          string                `json:"ovaDownloadPathTemplate"`
-	CustomTags                       []string              `json:"customTags"`
-	PriorityKeywordsEnable           bool                  `json:"priorityKeywordsEnable"`
-	PriorityKeywords                 []string              `json:"priorityKeywords"`
 	DelayedDownload                  int                   `json:"delayedDownload"`
 	RssSleepMinutes                  int                   `json:"rssSleepMinutes"`
 	RenameSleepSeconds               int                   `json:"renameSleepSeconds"`
@@ -144,9 +126,6 @@ type Config struct {
 	Rss                              bool                  `json:"rss"`
 	RssTimeout                       int                   `json:"rssTimeout"`
 	FileExist                        bool                  `json:"fileExist"`
-	AwaitStalledUP                   bool                  `json:"awaitStalledUP"`
-	Delete                           bool                  `json:"delete"`
-	DeleteStandbyRSSOnly             bool                  `json:"deleteStandbyRSSOnly"`
 	Offset                           bool                  `json:"offset"`
 	TitleYear                        bool                  `json:"titleYear"`
 	AutoDisabled                     bool                  `json:"autoDisabled"`
@@ -161,7 +140,6 @@ type Config struct {
 	ProxyPort                        int                   `json:"proxyPort"`
 	ProxyUsername                    string                `json:"proxyUsername"`
 	ProxyPassword                    string                `json:"proxyPassword"`
-	DownloadCount                    int                   `json:"downloadCount"`
 	Login                            Login                 `json:"login"`
 	MultiLoginForbidden              bool                  `json:"multiLoginForbidden"`
 	LoginEffectiveHours              int                   `json:"loginEffectiveHours"`
@@ -171,10 +149,9 @@ type Config struct {
 	BgmJpName                        bool                  `json:"bgmJpName"`
 	Tmdb                             bool                  `json:"tmdb"`
 	TmdbId                           bool                  `json:"tmdbId"`
-	TmdbIdPlexMode                   bool                  `json:"tmdbIdPlexMode"`
-	TmdbLanguage                     string                `json:"tmdbLanguage"`
-	TmdbRomaji                       bool                  `json:"tmdbRomaji"`
+TmdbIdPlexMode                   bool                  `json:"tmdbIdPlexMode"`
 	TmdbOriginalName                 bool                  `json:"tmdbOriginalName"`
+	TmdbLanguage                     string                `json:"tmdbLanguage"`
 	IpWhitelist                      bool                  `json:"ipWhitelist"`
 	IpWhitelistStr                   string                `json:"ipWhitelistStr"`
 	Omit                             bool                  `json:"omit"`
@@ -186,15 +163,11 @@ type Config struct {
 	BgmRedirectUri                   string                `json:"bgmRedirectUri"`
 	ApiKey                           string                `json:"apiKey"`
 	DownloadNew                      bool                  `json:"downloadNew"`
-	InnerIP                          bool                  `json:"innerIP"`
 	RenameTemplate                   string                `json:"renameTemplate"`
 	RenameDelYear                    bool                  `json:"renameDelYear"`
 	RenameDelTmdbId                  bool                  `json:"renameDelTmdbId"`
 	VerifyLoginIp                    bool                  `json:"verifyLoginIp"`
-	AutoTrackersUpdate               bool                  `json:"autoTrackersUpdate"`
-	TrackersUpdateUrls               string                `json:"trackersUpdateUrls"`
 	NotificationTemplate             string                `json:"notificationTemplate"`
-	AutoUpdate                       bool                  `json:"autoUpdate"`
 	BgmImage                         string                `json:"bgmImage"`
 	CustomCss                        string                `json:"customCss"`
 	CustomJs                         string                `json:"customJs"`
@@ -203,19 +176,14 @@ type Config struct {
 	CustomEpisodeGroupIndex          int                   `json:"customEpisodeGroupIndex"`
 	Procrastinating                  bool                  `json:"procrastinating"`
 	ProcrastinatingDay               int                   `json:"procrastinatingDay"`
-	GithubToken                      string                `json:"githubToken"`
 	UpdateTotalEpisodeNumber         bool                  `json:"updateTotalEpisodeNumber"`
 	ForceUpdateTotalEpisodeNumber    bool                  `json:"forceUpdateTotalEpisodeNumber"`
 	OpenListDownloadTimeout          int                   `json:"openListDownloadTimeout"`
-	OpenListDownloadRetryNumber      int64                 `json:"openListDownloadRetryNumber"`
-	ConfigBackup                     bool                  `json:"configBackup"`
-	ConfigBackupDay                  int                   `json:"configBackupDay"`
 	Completed                        bool                  `json:"completed"`
 	CompletedPathTemplate            string                `json:"completedPathTemplate"`
 	NotificationConfigList           []NotificationConfig  `json:"notificationConfigList"`
 	CopyMasterToStandby              bool                  `json:"copyMasterToStandby"`
 	SortType                         string                `json:"sortType"`
-	ProxyList                        string                `json:"proxyList"`
 	Scrape                           bool                  `json:"scrape"`
 	FollowDay                        int                   `json:"followDay"`
 	BangumiIniEnabled                bool                  `json:"bangumiIniEnabled"`
@@ -225,10 +193,7 @@ type Config struct {
 	GitInfo                          *GitInfo              `json:"gitInfo"`
 	ReverseProxyTrustIpListEnabled   bool                  `json:"reverseProxyTrustIpListEnabled"`
 	ReverseProxyTrustIpList          []string              `json:"reverseProxyTrustIpList"`
-	SubtitleIndependentFolderEnabled bool                  `json:"subtitleIndependentFolderEnabled"`
-	SubtitleIndependentFolderName    string                `json:"subtitleIndependentFolderName"`
 	BgmApi                           string                `json:"bgmApi"`
-	AutoStart                        bool                  `json:"autoStart"`
 	AllowCors                        bool                  `json:"allowCors"`
 	UUID                             string                `json:"uuid"`
 }
@@ -250,7 +215,6 @@ func DefaultConfig() *Config {
 		Rename:                          true,
 		Rss:                             true,
 		RssTimeout:                      20,
-		AwaitStalledUP:                  true,
 		TitleYear:                       true,
 		Skip5:                           true,
 		LogsMax:                         128,
@@ -267,13 +231,10 @@ func DefaultConfig() *Config {
 		CustomEpisodeStr:                renameRegStr,
 		ProcrastinatingDay:              14,
 		OpenListDownloadTimeout:         60,
-		OpenListDownloadRetryNumber:     5,
-		ConfigBackupDay:                 7,
 		SortType:                        "SCORE",
 		FollowDay:                       14,
 		LimitLoginAttempts:              true,
 		ReverseProxyTrustIpList:         []string{"127.0.0.1"},
-		SubtitleIndependentFolderName:   "Subs",
 		BgmApi:                          "https://api.bgm.tv",
 	}
 }

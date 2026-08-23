@@ -245,26 +245,6 @@ func (e *EmbyRefresh) Send(cfg *model.NotificationConfig, ani *model.Ani, text s
 	return nil
 }
 
-// FileMove moves downloaded files (stub wiring to service layer).
-type FileMove struct{}
-
-func (f *FileMove) Send(cfg *model.NotificationConfig, ani *model.Ani, text string, status model.NotificationStatusEnum) error {
-	return FileMoveFn(cfg, ani, text)
-}
-
-// FileMoveFn is wired to the service layer.
-var FileMoveFn func(cfg *model.NotificationConfig, ani *model.Ani, text string) error
-
-// OpenListUpload uploads files to OpenList (stub wiring to service layer).
-type OpenListUpload struct{}
-
-func (o *OpenListUpload) Send(cfg *model.NotificationConfig, ani *model.Ani, text string, status model.NotificationStatusEnum) error {
-	return OpenListUploadFn(cfg, ani, text)
-}
-
-// OpenListUploadFn is wired to the service layer.
-var OpenListUploadFn func(cfg *model.NotificationConfig, ani *model.Ani, text string) error
-
 // Mail sends email via SMTP.
 type Mail struct{}
 

@@ -176,12 +176,6 @@ func DownloadAni(ani *model.Ani) {
 	log.Debugf("download", "%s 共 %d 个", title, len(items))
 
 	torrentsInfos := download.GetTorrentsInfos()
-	count := int64(0)
-	for _, t := range torrentsInfos {
-		if !t.Finished() {
-			count++
-		}
-	}
 
 	savePath := GetDownloadPath(ani)
 	RssProcrastinating(ani, items)
@@ -236,43 +230,6 @@ func DownloadAni(ani *model.Ani) {
 			}
 		}
 
-		// 备用RSS 洗版
-		if cfg.Delete && master && cfg.DeleteStandbyRSSOnly {
-			token := regSeasonEp.FindString(reName)
-			var standby *model.TorrentsInfo
-			for _, t := range torrentsInfos {
-				if t.SavePath != savePath {
-					continue
-				}
-				if !regSeasonEp.MatchString(t.Name) {
-					continue
-				}
-				if regSeasonEp.FindString(t.Name) != token {
-					continue
-				}
-				if t.HasTag(model.TagStandbyRss) || !containsStr(t.TagList, ani.Subgroup) {
-					standby = t
-					break
-				}
-			}
-			if standby != nil {
-				if standby.HasTag(model.TagRename) {
-					if DeleteTorrent(standby, false, false) {
-						for i, t := range torrentsInfos {
-							if t == standby {
-								torrentsInfos = append(torrentsInfos[:i], torrentsInfos[i+1:]...)
-								break
-							}
-						}
-					} else {
-						continue
-					}
-				} else {
-					continue
-				}
-			}
-		}
-
 		dup := false
 		for _, t := range torrentsInfos {
 			if strings.EqualFold(t.Hash, hash) {
@@ -296,24 +253,16 @@ func DownloadAni(ani *model.Ani) {
 			continue
 		}
 
-		if cfg.DownloadCount > 0 && count >= int64(cfg.DownloadCount) {
-			log.Debugf("download", "达到同时下载数量限制 %d", cfg.DownloadCount)
-			continue
-		}
-
 		saveTorrent := SaveTorrent(ani, item)
 		if fi, err := os.Stat(saveTorrent); err != nil || fi.Size() < 0 {
 			continue
 		}
-
-		DeleteStandbyRss(ani, item)
 
 		sync = true
 		downloadAni(ani, item, savePath, saveTorrent)
 		if master && !is5 {
 			currentDownloadCount++
 		}
-		count++
 	}
 
 	if sync {
@@ -399,58 +348,6 @@ func downloadAni(ani *model.Ani, item *model.Item, savePath, torrentPath string)
 	}
 }
 
-// DeleteStandbyRss removes standby-rss downloads and files for the same episode.
-func DeleteStandbyRss(ani *model.Ani, item *model.Item) {
-	cfg := config.Get()
-	if !cfg.Delete || !cfg.StandbyRss || cfg.Coexist {
-		return
-	}
-	if !regSeasonEp.MatchString(item.ReName) {
-		return
-	}
-	episode := regSeasonEp.FindString(item.ReName)
-	downloadPath := GetDownloadPath(ani)
-
-	for _, t := range FindTorrentsInfosByAni(ani) {
-		if !regSeasonEp.MatchString(t.Name) {
-			continue
-		}
-		if strings.EqualFold(regSeasonEp.FindString(t.Name), episode) {
-			DeleteTorrent(t, true, true)
-		}
-	}
-
-	entries, err := os.ReadDir(downloadPath)
-	if err != nil {
-		return
-	}
-	for _, e := range entries {
-		name := e.Name()
-		if !regSeasonEp.MatchString(name) {
-			continue
-		}
-		if !strings.EqualFold(regSeasonEp.FindString(name), episode) {
-			continue
-		}
-		isDel := false
-		if !e.IsDir() {
-			ext := strings.ToLower(filepath.Ext(name))
-			if ext == "" {
-				continue
-			}
-			if util.IsVideo(name) || util.IsSubtitle(name) || ext == ".nfo" || ext == ".bif" || strings.HasSuffix(name, "-thumb.jpg") {
-				isDel = true
-			}
-		} else {
-			isDel = true
-		}
-		if isDel {
-			log.Infof("download", "已开启备用RSS, 自动删除 %s", filepath.Join(downloadPath, name))
-			_ = os.RemoveAll(filepath.Join(downloadPath, name))
-		}
-	}
-}
-
 // ItemDownloaded checks whether a local file already matches the item.
 func ItemDownloaded(ani *model.Ani, item *model.Item, checkDownloadList bool) bool {
 	cfg := config.Get()
@@ -514,10 +411,6 @@ func ItemDownloaded(ani *model.Ani, item *model.Item, checkDownloadList bool) bo
 // DeleteTorrent removes a torrent from the client (mirrors TorrentUtil.delete).
 func DeleteTorrent(t *model.TorrentsInfo, forcedDelete, deleteFiles bool) bool {
 	if !forcedDelete {
-		cfg := config.Get()
-		if !cfg.Delete {
-			return false
-		}
 		if !AllowDelete(t) {
 			return false
 		}

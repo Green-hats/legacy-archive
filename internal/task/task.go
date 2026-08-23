@@ -112,9 +112,7 @@ func RenameAndNotify(t *model.TorrentsInfo) {
 		}
 	}
 	service.Notification(t)
-	if !cfg.DeleteStandbyRSSOnly {
-		service.DeleteTorrent(t, false, false)
-	}
+	service.DeleteTorrent(t, false, false)
 }
 
 // BgmLoop refreshes scores every 12 hours.

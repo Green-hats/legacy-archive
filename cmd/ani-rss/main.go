@@ -124,8 +124,6 @@ func wireHooks() {
 
 	notify.CurrentConfig = func() *model.Config { return config.Get() }
 	notify.LogMsg = func(msg string) { log.Info("notification", msg) }
-	notify.FileMoveFn = service.FileMove
-	notify.OpenListUploadFn = service.OpenListUpload
 
 	download.SetFindAniHook(service.FindAniByDownloadPath)
 	service.ScrapeFn = scrape.Scrape

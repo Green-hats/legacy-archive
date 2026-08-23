@@ -47,16 +47,15 @@ type Log struct {
 
 // About carries version/update info for /api/about.
 type About struct {
-	Version     string     `json:"version"`
-	Latest      string     `json:"latest"`
-	Update      bool       `json:"update"`
-	AutoUpdate  bool       `json:"autoUpdate"`
-	DownloadURL string     `json:"downloadUrl"`
-	SHA256      string     `json:"sha256"`
-	Size        int64      `json:"size"`
-	FormatSize  string     `json:"formatSize"`
-	MarkdownBody string    `json:"markdownBody"`
-	Date        DateTime   `json:"date"`
+	Version     string   `json:"version"`
+	Latest      string   `json:"latest"`
+	Update      bool     `json:"update"`
+	DownloadURL string   `json:"downloadUrl"`
+	SHA256      string   `json:"sha256"`
+	Size        int64    `json:"size"`
+	FormatSize  string   `json:"formatSize"`
+	MarkdownBody string  `json:"markdownBody"`
+	Date        DateTime `json:"date"`
 }
 
 // GroupRegex holds fansub filter rules for the subgroup picker.

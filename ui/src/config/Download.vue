@@ -57,14 +57,6 @@
     <el-form-item label="失败重试次数">
       <el-input-number v-model:model-value="props.config['downloadRetry']" :max="100" :min="3"/>
     </el-form-item>
-    <el-form-item label="同时下载限制">
-      <div>
-        <el-input-number v-model:model-value="props.config.downloadCount" :min="0"/>
-        <div>
-          设置为时 0 不做限制
-        </div>
-      </div>
-    </el-form-item>
     <el-form-item label="延迟下载">
       <el-input-number v-model:model-value="props.config.delayedDownload" :min="0">
         <template #suffix>
@@ -72,34 +64,12 @@
         </template>
       </el-input-number>
     </el-form-item>
-    <el-form-item label="优先保留">
-      <div class="full-width">
-        <el-switch v-model:model-value="props.config.priorityKeywordsEnable"/>
-        <div>
-          <el-text class="mx-1" size="small">
-            启用多文件种子的文件优先保留过滤
-          </el-text>
-        </div>
-        <div v-if="props.config.priorityKeywordsEnable">
-          <PrioKeys
-              v-model:keywords="props.config.priorityKeywords"
-              :import-global="false"
-              :show-text="true"
-          />
-        </div>
-      </div>
-    </el-form-item>
-    <el-form-item label="自定义标签">
-      <custom-tags :config="props.config"/>
-    </el-form-item>
   </el-form>
 </template>
 
 <script setup>
 import {ref} from "vue";
 import {ElMessage, ElText} from "element-plus";
-import PrioKeys from "@/config/PrioKeys.vue";
-import CustomTags from "@/config/CustomTags.vue";
 import * as http from "@/js/http.js";
 
 const downloadSelect = ref([

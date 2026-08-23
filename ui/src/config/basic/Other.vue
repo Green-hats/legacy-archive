@@ -8,36 +8,11 @@
     <el-form-item label="Mikan">
       <el-input v-model:model-value="props.config.mikanHost" placeholder="https://mikanani.me"/>
     </el-form-item>
-    <el-form-item label="GithubToken">
-      <div class="full-width">
-        <div>
-          <el-input v-model="props.config['githubToken']" clearable placeholder="在此处输入GithubToken"/>
-        </div>
-        <div style="justify-content: end;" class="flex margin-top-4">
-          <el-button :icon="Github" bg
-                     @click="openUrl('https://github.com/login/oauth/authorize?client_id=Ov23li1dD89l7iGKhYa3&redirect_uri=https://github-app.wushuo.top/&scope=read:user')">
-            获取GithubToken
-          </el-button>
-        </div>
-      </div>
-    </el-form-item>
     <el-form-item label="最大日志条数">
       <div class="width-150">
         <el-select v-model:model-value="props.config.logsMax">
           <el-option v-for="it in [128,256,512]" :key="it" :label="it" :value="it"/>
         </el-select>
-      </div>
-    </el-form-item>
-    <el-form-item label="自动更新">
-      <div class="full-width">
-        <div>
-          <el-switch v-model:model-value="props.config.autoUpdate"/>
-        </div>
-        <div>
-          <el-text class="mx-1" size="small">
-            每天 06:00 自动更新程序
-          </el-text>
-        </div>
       </div>
     </el-form-item>
     <el-form-item label="DEBUG">
@@ -55,20 +30,6 @@
         </div>
       </div>
     </el-form-item>
-    <el-form-item label="自动备份配置">
-      <div>
-        <el-switch v-model="props.config['configBackup']"/>
-        <br>
-        <el-input-number v-model="props.config['configBackupDay']" :min="1">
-          <template #suffix>
-            <span>天</span>
-          </template>
-        </el-input-number>
-      </div>
-    </el-form-item>
-    <el-form-item label="开机自启">
-      <el-switch v-model="props.config['autoStart']"/>
-    </el-form-item>
   </el-form>
 </template>
 
@@ -76,10 +37,7 @@
 import {ElMessage, ElText} from "element-plus";
 import {ref} from "vue";
 import * as http from "@/js/http.js";
-import {Github} from "@vicons/fa";
 import {getBaseUrl} from "@/js/global.js";
-
-let openUrl = (url) => window.open(url)
 
 let clearCacheLoading = ref(false)
 let clearCache = () => {

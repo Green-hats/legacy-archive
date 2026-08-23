@@ -27,9 +27,6 @@
       <el-input v-model="notificationConfig.serverChan3ApiUrl"
                 placeholder="https://<uid>.push.ft07.com/send/<sendKey>.send"/>
     </el-form-item>
-    <el-form-item label="事件标题">
-      <el-switch v-model="notificationConfig['serverChanTitleAction']"/>
-    </el-form-item>
   </template>
 </template>
 

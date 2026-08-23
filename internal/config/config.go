@@ -210,9 +210,6 @@ func fillConfigDefaults(c, def *model.Config, present map[string]bool) {
 	if !present["rssTimeout"] {
 		c.RssTimeout = def.RssTimeout
 	}
-	if !present["awaitStalledUP"] {
-		c.AwaitStalledUP = def.AwaitStalledUP
-	}
 	if !present["titleYear"] {
 		c.TitleYear = def.TitleYear
 	}
@@ -261,12 +258,6 @@ func fillConfigDefaults(c, def *model.Config, present map[string]bool) {
 	if !present["openListDownloadTimeout"] {
 		c.OpenListDownloadTimeout = def.OpenListDownloadTimeout
 	}
-	if !present["openListDownloadRetryNumber"] {
-		c.OpenListDownloadRetryNumber = def.OpenListDownloadRetryNumber
-	}
-	if !present["configBackupDay"] {
-		c.ConfigBackupDay = def.ConfigBackupDay
-	}
 	if !present["sortType"] {
 		c.SortType = def.SortType
 	}
@@ -278,9 +269,6 @@ func fillConfigDefaults(c, def *model.Config, present map[string]bool) {
 	}
 	if !present["bgmApi"] {
 		c.BgmApi = def.BgmApi
-	}
-	if !present["subtitleIndependentFolderName"] {
-		c.SubtitleIndependentFolderName = def.SubtitleIndependentFolderName
 	}
 	if !present["notificationTemplate"] {
 		c.NotificationTemplate = def.NotificationTemplate
@@ -300,12 +288,6 @@ func fillConfigDefaults(c, def *model.Config, present map[string]bool) {
 	// always serialize lists as [] (frontend relies on .length/.push)
 	if c.Exclude == nil {
 		c.Exclude = []string{}
-	}
-	if c.CustomTags == nil {
-		c.CustomTags = []string{}
-	}
-	if c.PriorityKeywords == nil {
-		c.PriorityKeywords = []string{}
 	}
 	if c.NotificationConfigList == nil {
 		c.NotificationConfigList = []model.NotificationConfig{}

@@ -38,7 +38,6 @@
         <br>
         <el-checkbox v-model="props.config['tmdbAnime']" label="仅获取动漫"/>
         <el-checkbox v-model="props.config['tmdbOriginalName']" label="使用原标题"/>
-        <el-checkbox v-model="props.config['tmdbRomaji']" label="优先获取罗马音"/>
       </div>
     </el-form-item>
     <el-form-item label="TMDB语言">
@@ -79,9 +78,6 @@
           <el-input-number v-model="props.config.customEpisodeGroupIndex"/>
         </div>
       </div>
-    </el-form-item>
-    <el-form-item label="自动上传">
-      <el-switch v-model="props.config['upload']"/>
     </el-form-item>
     <el-form-item label="自动替换">
       <div>

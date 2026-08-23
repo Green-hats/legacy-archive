@@ -63,17 +63,6 @@
         </el-text>
       </div>
     </el-form-item>
-    <el-form-item label="字幕独立文件夹">
-      <div>
-        <el-switch v-model:model-value="props.config.subtitleIndependentFolderEnabled"/>
-        <br>
-        <el-input v-model="config.subtitleIndependentFolderName"/>
-        <br>
-        <el-text class="mx-1" size="small">
-          仅支持 qBittorrent
-        </el-text>
-      </div>
-    </el-form-item>
   </el-form>
 </template>
 

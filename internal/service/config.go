@@ -83,43 +83,6 @@ func TestProxy(rawURL string, cfg *model.Config) (*model.ProxyTest, error) {
 	}, nil
 }
 
-// UpdateTrackers pushes the tracker list to the download client.
-func UpdateTrackers(cfg *model.Config) {
-	urls := cfg.TrackersUpdateUrls
-	var trackers []string
-	for _, line := range strings.Split(urls, "\n") {
-		line = strings.TrimSpace(line)
-		if line == "" {
-			continue
-		}
-		if trackers, err := fetchTrackers(line); err == nil {
-			for _, t := range trackers {
-				if !containsStr(trackers, t) {
-					trackers = append(trackers, t)
-				}
-			}
-		}
-	}
-	if len(trackers) > 0 {
-		download.Type().UpdateTrackers(trackers)
-	}
-}
-
-func fetchTrackers(rawURL string) ([]string, error) {
-	b, err := util.GetBytes(rawURL)
-	if err != nil {
-		return nil, err
-	}
-	var out []string
-	for _, line := range strings.Split(string(b), "\n") {
-		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "http") {
-			out = append(out, line)
-		}
-	}
-	return out, nil
-}
-
 // ClearCache clears the in-memory TTL cache and the img cache dir.
 func ClearCache() (string, error) {
 	size := cacheSize()

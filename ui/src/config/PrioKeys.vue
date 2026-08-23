@@ -31,13 +31,6 @@
                  @click="() => props.keywords.length = 0"/>
     </div>
     <div class="flex prio-keys-footer">
-      <el-button bg text size="small" @click="importGlobalKeywords" v-if="props.importGlobal"
-                 :disabled="disabledImport" :loading="importLoading">
-        <el-icon>
-          <Download/>
-        </el-icon>
-        从全局导入关键词
-      </el-button>
       <el-text class="mx-1" size="small" v-if="props.showText">
         当种子包含多个文件时，优先保留的文件关键词，优先级从左到右递减。
       </el-text>
@@ -48,8 +41,6 @@
 <script setup>
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
-import {Download} from '@element-plus/icons-vue'
-import {config} from "@/js/http.js";
 
 const handleClose = (index) => {
   props.keywords.splice(index, 1)
@@ -72,34 +63,8 @@ const addKeyword = () => {
   add.value = false
 }
 
-let importLoading = ref(false)
-let disabledImport = ref(false)
-
-let importGlobalKeywords = () => {
-  importLoading.value = true
-  config()
-      .then(res => {
-        disabledImport.value = true
-        if (!res.data.priorityKeywords || !res.data.priorityKeywords.length) {
-          ElMessage.warning('全局优先保留关键词为空')
-          return
-        }
-        for (let keyword of res.data.priorityKeywords) {
-          if (props.keywords.indexOf(keyword) > -1) {
-            continue
-          }
-          props.keywords.push(keyword)
-        }
-        ElMessage.success('导入成功')
-      })
-      .finally(() => {
-        importLoading.value = false
-      })
-}
-
 let props = defineProps({
   keywords: Array,
-  importGlobal: Boolean,
   showText: Boolean
 })
 </script>
