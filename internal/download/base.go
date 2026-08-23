@@ -65,6 +65,8 @@ type CloudClient interface {
 	FileURL(cloudPath string) string
 	// ListDir returns the files in a cloud directory (for the play list).
 	ListDir(cloudPath string) []CloudFile
+	// DeleteDir removes a cloud directory (the whole download folder).
+	DeleteDir(cloudPath string) bool
 }
 
 // CloudFile is one entry returned by ListDir.

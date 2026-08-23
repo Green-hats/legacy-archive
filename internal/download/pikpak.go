@@ -200,6 +200,9 @@ func (p *PikPak) ListDir(cloudPath string) []CloudFile {
 	return out
 }
 
+// DeleteDir is unsupported by PikPak (dev).
+func (p *PikPak) DeleteDir(cloudPath string) bool { return false }
+
 
 
 func parseSize(s string) int64 {

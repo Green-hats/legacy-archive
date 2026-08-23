@@ -7,7 +7,7 @@
       <div v-else>
         <el-text class="mx-1" size="large">是否删除共 {{ aniList.length }} 个订阅?</el-text>
       </div>
-      <el-checkbox v-model="deleteFiles" class="el-checkbox-danger">同时删除下载任务与本地已下载的文件</el-checkbox>
+      <el-checkbox v-model="deleteFiles" class="el-checkbox-danger">同时删除下载任务与已下载的文件</el-checkbox>
     </div>
     <div class="action">
       <el-button icon="Check" :loading="okLoading" @click="delAni" text bg type="danger">确定

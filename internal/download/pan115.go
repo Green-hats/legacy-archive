@@ -341,6 +341,45 @@ func (p *Pan115) FileURL(cloudPath string) string {
 	return ""
 }
 
+// DeleteDir removes a cloud folder at the given cloud path (recursively).
+func (p *Pan115) DeleteDir(cloudPath string) bool {
+	cid := "0"
+	parent := ""
+	for _, seg := range strings.Split(strings.Trim(cloudPath, "/"), "/") {
+		if seg == "" {
+			continue
+		}
+		files, err := p.listFiles(cid)
+		if err != nil {
+			return false
+		}
+		found := ""
+		for _, f := range files {
+			if f.IsDir && f.Name == seg {
+				found = f.ID
+				break
+			}
+		}
+		if found == "" {
+			return false // 目录不存在
+		}
+		parent = cid
+		cid = found
+	}
+	if cid == "0" || parent == "" {
+		return false
+	}
+	form := url.Values{}
+	form.Set("pid", parent)
+	form.Set("fid[0]", cid)
+	m, err := p.request("POST", "https://webapi.115.com/rb/delete", form)
+	if err != nil {
+		return false
+	}
+	state, _ := m["state"].(bool)
+	return state
+}
+
 // ListDir lists the files in a cloud directory.
 func (p *Pan115) ListDir(cloudPath string) []CloudFile {
 	dirID := p.findDirID(cloudPath)

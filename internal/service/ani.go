@@ -290,6 +290,13 @@ func DeleteAni(ids []string, deleteFiles bool) {
 			_ = os.RemoveAll(dir)
 			if deleteFiles {
 				path := GetDownloadPath(a)
+				if cloud, ok := download.Type().(download.CloudClient); ok {
+					if cloud.DeleteDir(path) {
+						log.Infof("delete", "已删除云端下载目录 %s", path)
+					} else {
+						log.Warnf("delete", "删除云端下载目录失败(或不存在) %s", path)
+					}
+				}
 				for _, t := range FindTorrentsInfosByAni(a) {
 					DeleteTorrent(t, true, true)
 				}
