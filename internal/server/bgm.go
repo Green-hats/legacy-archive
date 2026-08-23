@@ -19,38 +19,6 @@ func (s *Server) handleSearchBgm(w http.ResponseWriter, r *http.Request) {
 	ok(w, bgm.Search(name))
 }
 
-// handleGetAniBySubjectId processes POST /api/getAniBySubjectId.
-func (s *Server) handleGetAniBySubjectId(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-	if id == "" {
-		fail(w, "id 不能为空")
-		return
-	}
-	info, err := bgm.GetBgmInfo(id)
-	if err != nil {
-		fail(w, err.Error())
-		return
-	}
-	ani := model.DefaultAni()
-	ani.BgmUrl = "https://bgm.tv/subject/" + id
-	ani.Title = info.NameCn
-	if ani.Title == "" {
-		ani.Title = info.Name
-	}
-	ani.Season = info.Season
-	if info.Season == 0 {
-		ani.Season = 1
-	}
-	ani.Ova = info.Platform == "OVA" || info.Platform == "剧场版"
-	if !ani.ReleaseDate.Time().IsZero() {
-		ani.ReleaseDate = model.Date(info.Date.Time())
-	}
-	ani.Score = info.Rating.Score
-	ani.Image = info.Images.Large
-	ani.CustomDownloadPath = true
-	ok(w, ani)
-}
-
 // handleGetBgmTitle processes POST /api/getBgmTitle.
 func (s *Server) handleGetBgmTitle(w http.ResponseWriter, r *http.Request) {
 	var body model.Ani

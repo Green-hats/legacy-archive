@@ -63,15 +63,11 @@ export default defineConfig({
                         },
                         {
                             name: 'utils',
-                            test: /node_modules[\\/](crypto-js|markdown-it|markdown-it-github-alerts)/,
+                            test: /node_modules[\\/](crypto-js)/,
                         },
                         {
                             name: 'element-icon',
                             test: /node_modules[\\/](@element-plus[\\/]icons-vue)/,
-                        },
-                        {
-                            name: 'artplayer',
-                            test: /node_modules[\\/](artplayer|artplayer-plugin-multiple-subtitles)/,
                         },
                         {
                             name: 'shiki',

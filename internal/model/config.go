@@ -70,7 +70,6 @@ type NotificationConfig struct {
 	ServerChanSendKey      string                 `json:"serverChanSendKey"`
 	ServerChan3ApiUrl      string                 `json:"serverChan3ApiUrl"`
 	ServerChanTitleAction  string                 `json:"serverChanTitleAction"`
-	SystemMsg              bool                   `json:"systemMsg"`
 	TelegramBotToken       string                 `json:"telegramBotToken"`
 	TelegramChatId         string                 `json:"telegramChatId"`
 	TelegramTopicId        int                    `json:"telegramTopicId"`
@@ -81,7 +80,6 @@ type NotificationConfig struct {
 	WebHookUrl             string                 `json:"webHookUrl"`
 	WebHookHeader          string                 `json:"webHookHeader"`
 	WebHookBody            string                 `json:"webHookBody"`
-	EmbyRefresh            bool                   `json:"embyRefresh"`
 	EmbyHost               string                 `json:"embyHost"`
 	EmbyApiKey             string                 `json:"embyApiKey"`
 	EmbyRefreshViewIds     string                 `json:"embyRefreshViewIds"`
@@ -197,17 +195,12 @@ type Config struct {
 	TrackersUpdateUrls               string                `json:"trackersUpdateUrls"`
 	NotificationTemplate             string                `json:"notificationTemplate"`
 	AutoUpdate                       bool                  `json:"autoUpdate"`
-	Version                          string                `json:"version"`
 	BgmImage                         string                `json:"bgmImage"`
 	CustomCss                        string                `json:"customCss"`
 	CustomJs                         string                `json:"customJs"`
 	CustomEpisode                    bool                  `json:"customEpisode"`
 	CustomEpisodeStr                 string                `json:"customEpisodeStr"`
 	CustomEpisodeGroupIndex          int                   `json:"customEpisodeGroupIndex"`
-	Provider                         string                `json:"provider"`
-	Upload                           bool                  `json:"upload"`
-	UpLimit                          int64                 `json:"upLimit"`
-	DlLimit                          int64                 `json:"dlLimit"`
 	Procrastinating                  bool                  `json:"procrastinating"`
 	ProcrastinatingDay               int                   `json:"procrastinatingDay"`
 	GithubToken                      string                `json:"githubToken"`
@@ -272,8 +265,6 @@ func DefaultConfig() *Config {
 		Omit:                            true,
 		CustomEpisodeGroupIndex:         2,
 		CustomEpisodeStr:                renameRegStr,
-		Provider:                        "115 Open",
-		Upload:                          true,
 		ProcrastinatingDay:              14,
 		OpenListDownloadTimeout:         60,
 		OpenListDownloadRetryNumber:     5,

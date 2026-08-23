@@ -120,52 +120,8 @@ func GetBytes(rawURL string) ([]byte, error) {
 	return io.ReadAll(resp.Body)
 }
 
-// GetBytesTimeout fetches with a custom timeout.
-func GetBytesTimeout(rawURL string, timeoutSec int) ([]byte, error) {
-	req, err := http.NewRequest("GET", rawURL, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("User-Agent", UserAgent())
-	resp, err := ClientFor(timeoutSec).Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, errors.New("http status " + resp.Status)
-	}
-	return io.ReadAll(resp.Body)
-}
-
 // MD5Hex computes the md5 digest hex of a string.
 func MD5Hex(s string) string {
 	sum := md5.Sum([]byte(s))
 	return hex.EncodeToString(sum[:])
-}
-
-// ProxyList caches the proxy list (10 min).
-var proxyListCache struct {
-	key  string
-	list []string
-	at   time.Time
-}
-
-// GetProxyList splits the config proxyList by newlines (cached 10 min).
-func GetProxyList() []string {
-	cfg := config.Get()
-	s := cfg.ProxyList
-	if proxyListCache.key == s && time.Since(proxyListCache.at) < 10*time.Minute {
-		return proxyListCache.list
-	}
-	var list []string
-	for _, line := range strings.Split(s, "\n") {
-		if line = strings.TrimSpace(line); line != "" {
-			list = append(list, line)
-		}
-	}
-	proxyListCache.key = s
-	proxyListCache.list = list
-	proxyListCache.at = time.Now()
-	return list
 }

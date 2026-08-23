@@ -162,5 +162,3 @@ func sleepDuration(stop <-chan struct{}, d time.Duration) {
 	case <-time.After(d):
 	}
 }
-
-var _ = model.TagRename

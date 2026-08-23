@@ -175,21 +175,6 @@ html, body, #app {
     }
 }
 
-.markdown-body code, .markdown-body tt {
-    padding: .2em .4em;
-    margin: 0;
-    font-size: 85%;
-    white-space: break-spaces;
-    background-color: #656c7633;
-    border-radius: 6px;
-}
-
-.markdown-body blockquote {
-    padding: 0 1em;
-    color: #59636e;
-    border-left: .25em solid #d1d9e0;
-}
-
 /* 多选框 */
 .el-checkbox-danger {
     --el-checkbox-checked-text-color: var(--el-color-danger);

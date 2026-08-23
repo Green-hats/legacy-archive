@@ -333,7 +333,7 @@ func generateEpisodeNfo(e tmdb.TmdbEpisode) string {
 	sb.WriteString("    <episode>" + fmt.Sprint(e.EpisodeNumber) + "</episode>\n")
 	season := e.SeasonNumber
 	if season <= 0 {
-		season = seasonOf(e)
+		season = 0
 	}
 	sb.WriteString("    <season>" + fmt.Sprint(season) + "</season>\n")
 	if e.Runtime != 0 {
@@ -342,8 +342,6 @@ func generateEpisodeNfo(e tmdb.TmdbEpisode) string {
 	sb.WriteString("</episodedetails>\n")
 	return sb.String()
 }
-
-func seasonOf(e tmdb.TmdbEpisode) int { return 0 }
 
 func extOf(p string) string {
 	ext := strings.ToLower(filepath.Ext(p))

@@ -14,8 +14,6 @@ import (
 	"ani-rss/internal/util"
 )
 
-var idRe = regexp.MustCompile(`(\d+)(/)?$`)
-
 // Host returns the configured mikan host.
 func Host() string {
 	h := config.Get().MikanHost

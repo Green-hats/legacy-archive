@@ -130,19 +130,6 @@ type TmdbGenre struct {
 	Name string `json:"name"`
 }
 
-// GetTvById fetches TV details by id.
-func GetTvById(id int) (*model.Tmdb, error) {
-	b, err := tmdbReq(fmt.Sprintf("/3/tv/%d", id), url.Values{"append_to_response": {"translations,credits,videos"}})
-	if err != nil {
-		return nil, err
-	}
-	var m map[string]interface{}
-	if err := json.Unmarshal(b, &m); err != nil {
-		return nil, err
-	}
-	return parseTv(m), nil
-}
-
 func parseTv(m map[string]interface{}) *model.Tmdb {
 	t := &model.Tmdb{
 		ID:           intv(m["id"]),

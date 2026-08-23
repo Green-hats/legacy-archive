@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"net/http"
 	"strings"
 
 	"ani-rss/internal/model"
@@ -60,5 +59,3 @@ func handleEmbyEvent(e *model.EmbyWebHook) {
 		return
 	}
 }
-
-var _ = http.MethodGet

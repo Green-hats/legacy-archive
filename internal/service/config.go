@@ -2,7 +2,6 @@ package service
 
 import (
 	"archive/zip"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -10,7 +9,6 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 	"time"
 
@@ -20,12 +18,6 @@ import (
 	"ani-rss/internal/model"
 	"ani-rss/internal/util"
 )
-
-// SetConfig applies the new config to the singleton and persists it.
-// Only fields present in the JSON body are updated (partial merge semantics).
-func SetConfig(newCfg *model.Config) error {
-	return SetConfigRaw(JSONBytesOf(newCfg))
-}
 
 // SetConfigRaw merges the raw JSON body into the current config.
 func SetConfigRaw(raw []byte) error {
@@ -48,15 +40,6 @@ func SetConfigRaw(raw []byte) error {
 		download.Reload()
 	}
 	return nil
-}
-
-// JSONBytesOf marshals a config to JSON (helper for SetConfig).
-func JSONBytesOf(c *model.Config) []byte {
-	b, err := json.Marshal(c)
-	if err != nil {
-		return nil
-	}
-	return b
 }
 
 // DownloadLoginTest attempts to log into the configured download client.
@@ -147,89 +130,6 @@ func ClearCache() (string, error) {
 	}
 	ClearInMemoryCache()
 	return fmt.Sprintf("清理完成, 共清理 %d", size), nil
-}
-
-// Backup creates a zip backup under backup/<date>.zip.
-func Backup() error {
-	cfg := config.Get()
-	if !cfg.ConfigBackup {
-		return nil
-	}
-	ClearCover()
-	date := time.Now().Format("2006-01-02")
-	backupDir := filepath.Join(config.Dir(), "backup")
-	_ = os.MkdirAll(backupDir, 0o755)
-	outPath := filepath.Join(backupDir, date+".zip")
-	if _, err := os.Stat(outPath); err == nil {
-		return nil
-	}
-	if err := writeBackupZip(outPath); err != nil {
-		return err
-	}
-	// purge old backups
-	entries, err := os.ReadDir(backupDir)
-	if err != nil {
-		return nil
-	}
-	for _, e := range entries {
-		if !strings.HasSuffix(e.Name(), ".zip") {
-			continue
-		}
-		ts, err := time.ParseInLocation("2006-01-02.zip", e.Name(), model.Loc())
-		if err != nil {
-			continue
-		}
-		if time.Since(ts) > time.Duration(cfg.ConfigBackupDay)*24*time.Hour {
-			_ = os.Remove(filepath.Join(backupDir, e.Name()))
-		}
-	}
-	return nil
-}
-
-// ClearCover removes unused cover images and the img cache dir
-// (mirrors ClearService.clearCover).
-func ClearCover() int64 {
-	configDir := config.Dir()
-	filesDir := filepath.Join(configDir, "files")
-	imgDir := filepath.Join(configDir, "img")
-	_ = os.MkdirAll(filesDir, 0o755)
-	_ = os.MkdirAll(imgDir, 0o755)
-
-	// covers referenced by subscriptions
-	covers := map[string]bool{}
-	for _, ani := range config.AniList() {
-		if ani != nil && ani.Cover != "" {
-			covers[filepath.Join(configDir, "files", filepath.FromSlash(ani.Cover))] = true
-		}
-	}
-	var freed int64
-	_ = filepath.Walk(filesDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil || info.IsDir() {
-			return nil
-		}
-		if covers[path] {
-			return nil
-		}
-		freed += info.Size()
-		_ = os.Remove(path)
-		return nil
-	})
-	if sz := dirSize(imgDir); sz > 0 {
-		freed += sz
-	}
-	_ = os.RemoveAll(imgDir)
-	return freed
-}
-
-func dirSize(dir string) int64 {
-	var total int64
-	_ = filepath.Walk(dir, func(_ string, info os.FileInfo, err error) error {
-		if err == nil && !info.IsDir() {
-			total += info.Size()
-		}
-		return nil
-	})
-	return total
 }
 
 // writeBackupZip writes files/, torrents/, ani.v2.json, config.v2.json to a zip.
@@ -349,6 +249,3 @@ var RestartTasks = func() {}
 
 // GetLogs returns the in-memory log ring buffer.
 func GetLogs() []model.Log { return log.List() }
-
-// SortedReleases returns a sorted list of trackers (unused placeholder kept minimal).
-var _ = sort.Strings

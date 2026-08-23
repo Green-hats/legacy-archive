@@ -314,13 +314,6 @@ export let testIpWhitelist = () => fetch('api/testIpWhitelist', {method: 'post'}
 export let playList = (ani) => api.post('api/playList', ani)
 
 /**
- * 将指定id的BGM番剧转换为订阅
- * @param id BGM的ID
- * @returns {Promise<unknown>}
- */
-export let getAniBySubjectId = (id) => api.post(`api/getAniBySubjectId?id=${id}`)
-
-/**
  * 获取AniBT番剧列表
  * @param season 季度
  * @param bgmUrl
@@ -352,5 +345,3 @@ export let importConfig = (file) => {
         }
     }).then(res => res.json())
 }
-
-export let ping = () => api.get("api/ping")

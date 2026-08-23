@@ -54,20 +54,6 @@ type MikanItem struct {
 	Torrent    string   `json:"torrent"`
 }
 
-// MikanBgm is a cached remote score entry.
-type MikanBgm struct {
-	MikanId int     `json:"mikanId"`
-	BgmId   int     `json:"bgmId"`
-	Score   float64 `json:"score"`
-}
-
-// CollectionInfo is the input for the collection download flow.
-type CollectionInfo struct {
-	Torrent string   `json:"torrent"`
-	Ani     *Ani     `json:"ani"`
-	BgmInfo *BgmInfo `json:"bgmInfo"`
-}
-
 // BgmInfo is a Bangumi subject.
 type BgmInfo struct {
 	ID       string        `json:"id"`
@@ -219,45 +205,6 @@ type PlaySubtitle struct {
 	Content string `json:"content"`
 	Type    string `json:"type"`
 }
-
-// OpenListFileInfo is a file listing entry from OpenList.
-type OpenListFileInfo struct {
-	Name     string   `json:"name"`
-	Size     int64    `json:"size"`
-	IsDir    bool     `json:"isDir"`
-	Modified DateTime `json:"modified"`
-	Created  DateTime `json:"created"`
-	Path     string   `json:"path"`
-}
-
-// OpenListTaskInfo is an offline-download task.
-type OpenListTaskInfo struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Creator    string `json:"creator"`
-	CreatorRole int   `json:"creatorRole"`
-	State      int    `json:"state"`
-	Status     string `json:"status"`
-	Progress   int    `json:"progress"`
-	StartTime  string `json:"startTime"`
-	EndTime    string `json:"endTime"`
-	TotalBytes string `json:"totalBytes"`
-	Error      string `json:"error"`
-}
-
-// OpenList task states (IntEnum codes).
-const (
-	OpenListTaskPending          = 0
-	OpenListTaskRunning          = 1
-	OpenListTaskSucceeded        = 2
-	OpenListTaskCanceling        = 3
-	OpenListTaskCanceled         = 4
-	OpenListTaskError            = 5
-	OpenListTaskFailing          = 6
-	OpenListTaskFailed           = 7
-	OpenListTaskWaitingForRetry  = 8
-	OpenListTaskPreparingRetry   = 9
-)
 
 // ThemoviedbDTO is the input for getThemoviedbName.
 type ThemoviedbDTO struct {

@@ -12,9 +12,7 @@ import (
 	"ani-rss/internal/bgm"
 	"ani-rss/internal/config"
 	"ani-rss/internal/download"
-	"ani-rss/internal/log"
 	"ani-rss/internal/model"
-	"ani-rss/internal/notify"
 	"ani-rss/internal/rename"
 	"ani-rss/internal/rss"
 	"ani-rss/internal/util"
@@ -78,7 +76,6 @@ func ListAni() *model.ListAni {
 				releaseDateList = append(releaseDateList, month)
 			}
 			wd := int(ani.ReleaseDate.Time().Weekday())
-			ani.WeekLabel = weeks[wd]
 			weekItems[weeks[wd]] = append(weekItems[weeks[wd]], ani)
 		}
 	}
@@ -420,6 +417,3 @@ func moveLocalFiles(from, to string) {
 		_ = os.Rename(filepath.Join(from, e.Name()), filepath.Join(to, e.Name()))
 	}
 }
-
-var _ = notify.Send
-var _ = log.Info

@@ -143,29 +143,17 @@ const (
 
 // TorrentsInfo is a normalized torrent entry from any download client.
 type TorrentsInfo struct {
-	ID          int64            `json:"id"`
-	Hash        string           `json:"hash"`
-	Name        string           `json:"name"`
-	State       TorrentsStateEnum `json:"state"`
-	Category    string           `json:"category"`
-	TagList     []string         `json:"tagList"`
-	Completed   int64            `json:"completed"`
-	Size        int64            `json:"size"`
-	Progress    float64          `json:"progress"`
-	FormatSize  string           `json:"formatSize"`
-	SavePath    string           `json:"savePath"`
-	Files       []TorrentFile    `json:"files"`
-	DownloadDir string           `json:"downloadDir"`
-	FilesPath   []string         `json:"-"`
-}
-
-// TorrentFile is a file entry inside a torrent.
-type TorrentFile struct {
-	Name     string `json:"name"`
-	Path     string `json:"path"`
-	Size     int64  `json:"size"`
-	Progress float64 `json:"progress"`
-	Priority int    `json:"priority"`
+	ID         int64             `json:"id"`
+	Hash       string            `json:"hash"`
+	Name       string            `json:"name"`
+	State      TorrentsStateEnum `json:"state"`
+	Category   string            `json:"category"`
+	TagList    []string          `json:"tagList"`
+	Completed  int64             `json:"completed"`
+	Size       int64             `json:"size"`
+	Progress   float64           `json:"progress"`
+	FormatSize string            `json:"formatSize"`
+	SavePath   string            `json:"savePath"`
 }
 
 // Finished reports whether the torrent is in a finished state.

@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"ani-rss/internal/bgm"
 	"ani-rss/internal/config"
 	"ani-rss/internal/model"
 	"ani-rss/internal/service"
@@ -180,5 +179,3 @@ func (s *Server) handleRefreshCover(w http.ResponseWriter, r *http.Request) {
 	path := saveCover(body.Image)
 	ok(w, path)
 }
-
-var _ = bgm.GetBgmInfo

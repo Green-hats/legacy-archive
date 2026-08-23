@@ -78,16 +78,11 @@ type Ani struct {
 	ID                            string       `json:"id"`
 	MikanTitle                    string       `json:"mikanTitle"`
 	URL                           string       `json:"url"`
-	Exists                        bool         `json:"exists"`
 	StandbyRssList                []StandbyRss `json:"standbyRssList"`
 	Title                         string       `json:"title"`
 	JpTitle                       string       `json:"jpTitle"`
 	Offset                        int          `json:"offset"`
 	ReleaseDate                   Date         `json:"releaseDate"`
-	Year                          int          `json:"year"`
-	Month                         int          `json:"month"`
-	Date                          int          `json:"date"`
-	WeekLabel                     string       `json:"weekLabel"`
 	Season                        int          `json:"season"`
 	Cover                         string       `json:"cover"`
 	Image                         string       `json:"image"`

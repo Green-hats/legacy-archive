@@ -4,7 +4,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
 
 	"ani-rss/internal/config"
 	"ani-rss/internal/model"
@@ -108,22 +107,6 @@ func SaveTorrent(ani *model.Ani, item *model.Item) string {
 	os.Rename(tmp, path)
 	_ = b
 	return path
-}
-
-// GetMagnet builds a magnet link from a cached torrent file.
-func GetMagnet(path string) string {
-	hash := strings.TrimSuffix(filepath.Base(path), filepath.Ext(path))
-	fi, err := os.Stat(path)
-	if err != nil || fi.Size() < 1 {
-		return "magnet:?xt=urn:btih:" + hash
-	}
-	ext := strings.ToLower(filepath.Ext(path))
-	if ext == ".txt" {
-		b, _ := os.ReadFile(path)
-		return strings.TrimSpace(string(b))
-	}
-	// .torrent: fall back to filename-derived hash
-	return "magnet:?xt=urn:btih:" + hash
 }
 
 // AllowDelete decides whether a finished torrent can be deleted.

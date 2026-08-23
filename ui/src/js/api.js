@@ -5,18 +5,6 @@ let post = async (url, body) => {
     return await fetch_(url, 'POST', body);
 }
 
-let get = async (url) => {
-    return await fetch_(url, 'GET', '');
-}
-
-let del = async (url, body) => {
-    return await fetch_(url, 'DELETE', body);
-}
-
-let put = async (url, body) => {
-    return await fetch_(url, 'PUT', body);
-}
-
 let fetch_ = async (url, method, body) => {
     let headers = {}
     if (authorization.value) {
@@ -55,7 +43,7 @@ let fetch_ = async (url, method, body) => {
         })
 }
 
-export default {post, get, del, put}
+export default {post}
 
 let checkTimestampRange = (timestamp, isMilli = true) => {
     const ts = Math.floor(Number(timestamp));

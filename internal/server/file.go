@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 
 	"ani-rss/internal/config"
 	"ani-rss/internal/download"
@@ -118,11 +117,6 @@ func (s *Server) handleProxyImage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", contentTypeFor(cachePath))
 	w.Header().Set("Cache-Control", "public, max-age=2592000")
 	w.Write(b)
-}
-
-// handleTorrentsInfos processes POST /api/torrentsInfos.
-func (s *Server) handleTorrentsInfos(w http.ResponseWriter, r *http.Request) {
-	ok(w, download.GetTorrentsInfos())
 }
 
 // handleDeleteTorrent processes POST /api/deleteTorrent.
@@ -311,5 +305,3 @@ func (s *Server) handleUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	writeResult(w, &model.Result{Code: 200, Message: "上传完成", Data: rel, T: model.Now().UnixMilli()})
 }
-
-var _ = time.Now

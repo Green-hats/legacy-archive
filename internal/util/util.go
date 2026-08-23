@@ -79,8 +79,7 @@ func FormatSize(size int64) string {
 }
 
 var (
-	episodeTokenRe = regexp.MustCompile(`[Ss](\d+)[Ee](\d+(\.5)?)`)
-	pinyinArgs     = pinyin.Args{
+	pinyinArgs = pinyin.Args{
 		Style:     pinyin.Normal,
 		Heteronym: false,
 		Separator: "",
@@ -114,52 +113,6 @@ func GetPinyinInitials(s string) string {
 		}
 	}
 	return sb.String()
-}
-
-// GetEpisodeToken extracts the "SxxExx" token from a name, or "".
-func GetEpisodeToken(name string) string {
-	m := episodeTokenRe.FindString(name)
-	if m == "" {
-		return ""
-	}
-	// canonicalize
-	mm := episodeTokenRe.FindStringSubmatch(name)
-	if len(mm) < 3 {
-		return m
-	}
-	return fmt.Sprintf("S%sE%s", mm[1], mm[2])
-}
-
-var regHasChinese = regexp.MustCompile(`[\p{Han}]`)
-
-// HasChinese reports whether a string contains Chinese characters.
-func HasChinese(s string) bool { return regHasChinese.MatchString(s) }
-
-// IsBlank reports whether a string is empty or whitespace.
-func IsBlank(s string) bool { return strings.TrimSpace(s) == "" }
-
-// FirstNonBlank returns the first non-blank line of s, or "".
-func FirstNonBlank(s string) string {
-	for _, line := range strings.Split(s, "\n") {
-		if line = strings.TrimSpace(line); line != "" {
-			return line
-		}
-	}
-	return ""
-}
-
-// URLBase returns the base URL (scheme+host) of a URL string.
-func URLBase(raw string) string {
-	idx := strings.Index(raw, "://")
-	if idx < 0 {
-		return raw
-	}
-	rest := raw[idx+3:]
-	slash := strings.Index(rest, "/")
-	if slash < 0 {
-		return raw
-	}
-	return raw[:idx+3+slash]
 }
 
 var weekRegexes = []*regexp.Regexp{

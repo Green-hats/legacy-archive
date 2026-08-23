@@ -3,7 +3,6 @@ package notify
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"os/exec"
@@ -11,7 +10,6 @@ import (
 	"strings"
 
 	"ani-rss/internal/model"
-	"ani-rss/internal/util"
 )
 
 // Telegram sends messages via the Bot API.
@@ -273,6 +271,3 @@ type Mail struct{}
 func (m *Mail) Send(cfg *model.NotificationConfig, ani *model.Ani, text string, status model.NotificationStatusEnum) error {
 	return SendMail(cfg, ani, text, status)
 }
-
-var _ = io.Discard
-var _ = util.UserAgent

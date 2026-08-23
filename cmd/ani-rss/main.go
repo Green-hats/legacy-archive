@@ -41,8 +41,6 @@ func main() {
 	if port == "" {
 		port = "7789"
 	}
-	cfg := config.Get()
-	_ = cfg
 
 	task.Start()
 

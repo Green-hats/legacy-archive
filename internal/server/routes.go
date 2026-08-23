@@ -56,14 +56,12 @@ func (s *Server) register() {
 	r.Handle(http.MethodGet, "/api/file", requireAuth(s.handleFile))
 	r.Handle(http.MethodGet, "/api/calendar.ics", requireAuth(s.handleCalendarIcs))
 	r.Handle(http.MethodGet, "/api/proxyImage", requireAuth(s.handleProxyImage))
-	r.Handle(http.MethodPost, "/api/torrentsInfos", requireAuth(s.handleTorrentsInfos))
 	r.Handle(http.MethodPost, "/api/deleteTorrent", requireAuth(s.handleDeleteTorrent))
 	r.Handle(http.MethodPost, "/api/playList", requireAuth(s.handlePlayList))
 	r.Handle(http.MethodPost, "/api/upload", requireAuth(s.handleUpload))
 
 	// bgm
 	r.Handle(http.MethodPost, "/api/searchBgm", requireAuth(s.handleSearchBgm))
-	r.Handle(http.MethodPost, "/api/getAniBySubjectId", requireAuth(s.handleGetAniBySubjectId))
 	r.Handle(http.MethodPost, "/api/getBgmTitle", requireAuth(s.handleGetBgmTitle))
 	r.Handle(http.MethodPost, "/api/rate", requireAuth(s.handleRate))
 	r.Handle(http.MethodPost, "/api/setRate", requireAuth(s.handleSetRate))

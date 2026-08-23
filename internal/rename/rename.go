@@ -20,7 +20,6 @@ var (
 	regTmdbId   = regexp.MustCompile(` ?(\[tmdbid=(\d+)]|\{tmdb-(\d+)})`)
 	regRes      = regexp.MustCompile(`(720|1080|2160)[Pp]`)
 	regHashTail = regexp.MustCompile(`\[([A-Z]|\d){8}]$`)
-	regSeasonEp = regexp.MustCompile(`[Ss](\d+)[Ee](\d+(\.5)?)`)
 )
 
 // Rename extracts the episode and builds the reName for an item.
@@ -264,11 +263,6 @@ func GetSubgroup(items []*model.Item) string {
 		}
 	}
 	return "未知字幕组"
-}
-
-// GetEpisodeToken extracts the SxxExx token from a name.
-func GetEpisodeToken(name string) string {
-	return regSeasonEp.FindString(name)
 }
 
 // The following hooks are registered by the bgm/tmdb packages to avoid

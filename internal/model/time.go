@@ -79,28 +79,6 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// UnixMillis is a Long epoch-millis timestamp used by many fields.
-type UnixMillis int64
-
-// MillisFromTime converts a time to UnixMillis.
-func MillisFromTime(t time.Time) UnixMillis {
-	if t.IsZero() {
-		return 0
-	}
-	return UnixMillis(t.UnixMilli())
-}
-
-// Time returns the time value.
-func (m UnixMillis) Time() time.Time {
-	if m == 0 {
-		return time.Time{}
-	}
-	return time.UnixMilli(int64(m)).In(loc)
-}
-
-// MarshalRaw is a helper to keep raw json.RawMessage values.
-type MarshalRaw json.RawMessage
-
 // StrID is a string ID that also accepts JSON numbers on decode
 // (the animes.garden API returns numeric ids; Gson coerces them to strings).
 type StrID string
