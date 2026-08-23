@@ -41,7 +41,6 @@ const (
 	NotifyFileMove        NotificationTypeEnum = "FILE_MOVE"
 	NotifyOpenListUpload  NotificationTypeEnum = "OPEN_LIST_UPLOAD"
 	NotifyBark            NotificationTypeEnum = "BARK"
-	NotifyQQ              NotificationTypeEnum = "QQ"
 )
 
 // ServerChanTypeEnum values.
@@ -105,12 +104,6 @@ type NotificationConfig struct {
 	BarkUseMarkdown        bool                   `json:"barkUseMarkdown"`
 	BarkLevel              string                 `json:"barkLevel"`
 	BarkVolume             int                    `json:"barkVolume"`
-	QqBotAppId             string                 `json:"qqBotAppId"`
-	QqBotAppSecret         string                 `json:"qqBotAppSecret"`
-	QqTargetType           string                 `json:"qqTargetType"`
-	QqTargetId             string                 `json:"qqTargetId"`
-	QqSandbox              bool                   `json:"qqSandbox"`
-	QqApiBase              string                 `json:"qqApiBase"`
 	StatusList             []NotificationStatusEnum `json:"statusList"`
 	Sort                   int64                  `json:"sort"`
 }
@@ -125,8 +118,7 @@ func DefaultNotificationConfig() *NotificationConfig {
 		StatusList: []NotificationStatusEnum{
 			NotifyDownloadStart, NotifyOmit, NotifyError,
 		},
-		QqTargetType: "c2c",
-		Sort:         10,
+		Sort: 10,
 	}
 }
 

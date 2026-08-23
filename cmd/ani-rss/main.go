@@ -45,7 +45,6 @@ func main() {
 	_ = cfg
 
 	task.Start()
-	notify.SyncQQListeners()
 
 	// wire stop/restart control from the /api/stop endpoint
 	server.SetStopFn(func(shutdown bool) {
@@ -129,18 +128,6 @@ func wireHooks() {
 	notify.LogMsg = func(msg string) { log.Info("notification", msg) }
 	notify.FileMoveFn = service.FileMove
 	notify.OpenListUploadFn = service.OpenListUpload
-	notify.SaveNotificationConfig = func(cfg *model.NotificationConfig) error {
-		cur := config.Get()
-		for i := range cur.NotificationConfigList {
-			nc := &cur.NotificationConfigList[i]
-			if nc.NotificationType == model.NotifyQQ && nc.QqBotAppId == cfg.QqBotAppId {
-				nc.QqTargetType = cfg.QqTargetType
-				nc.QqTargetId = cfg.QqTargetId
-				return config.Sync()
-			}
-		}
-		return nil
-	}
 
 	download.SetFindAniHook(service.FindAniByDownloadPath)
 	service.ScrapeFn = scrape.Scrape

@@ -20,7 +20,7 @@
   - **MPV**:通过 `mpv-handler://` 协议唤起(见下方安装),OSD/窗口标题显示文件名
 - **核心**:RSS 抓取、剧集提取、重命名模板、缺集/摸鱼通知、备用RSS洗版
 - **刮削**:TMDB 刮削(NFO/poster/fanart/bangumi.ini)、Bangumi 搜索/评分/OAuth、Mikan / ani-bt / anime-garden 抓取
-- **通知**:Telegram / Bark / ServerChan / WebHook / Shell / 邮件 / Emby 刷新 / QQ 官方机器人
+- **通知**:Telegram / Bark / ServerChan / WebHook / Shell / 邮件 / Emby 刷新
 - MKV **内封字幕流式提取**(`matroska`,只读所需字节,不整读大文件)
 
 ## 快速开始(前置依赖)
@@ -56,15 +56,6 @@
 - `src/home/Config.vue`:移除**捐赠** tab。
 - **移除合集(Collection)与捐赠残留**相关组件/接口。
 - 前端不再调用 `getSubtitles`(后端 `/api/getSubtitles` 与 `matroska` 包保留,API 兼容)。
-
-## QQ 官方机器人通知
-
-1. 在 [QQ 开放平台](https://q.qq.com) 创建机器人,拿到 **AppID / AppSecret**,并在后台把**事件订阅方式配置为 WebSocket 模式**
-2. 前端「设置 → 通知 → 新增 → QQ机器人」,填入 AppID/AppSecret,保存(后端会自动建立 WebSocket 长连接监听消息)
-3. 用你自己的 QQ **私聊机器人**发送任意消息 → 后端自动捕获你的 `user_openid`,写回该通知配置的「目标ID」,并自动回发一条测试通知
-4. 目标类型支持 `c2c`(单聊)/ `group`(群聊,需让机器人进群并触发消息)/ `channel`(频道)
-
-注意:目标 openid 只能由真实事件产生,后端无法用 QQ 号直接发送;沙箱环境需先在后台添加测试 QQ 号,并勾选「沙箱环境」。
 - 配置与订阅持久化:`config.v2.json` / `ani.v2.json`(与原版格式一致,可无缝迁移)
 - 前端:编译时嵌入 `internal/server/webui`,SPA 回退;`<configDir>/webui` 可覆盖单个文件
 

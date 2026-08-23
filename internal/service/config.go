@@ -18,7 +18,6 @@ import (
 	"ani-rss/internal/download"
 	"ani-rss/internal/log"
 	"ani-rss/internal/model"
-	"ani-rss/internal/notify"
 	"ani-rss/internal/util"
 )
 
@@ -48,8 +47,6 @@ func SetConfigRaw(raw []byte) error {
 	if oldTool != cur.DownloadToolType {
 		download.Reload()
 	}
-	// sync QQ robot event listeners
-	notify.SyncQQListeners()
 	return nil
 }
 

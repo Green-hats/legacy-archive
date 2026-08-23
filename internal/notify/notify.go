@@ -91,8 +91,6 @@ func SenderFor(t model.NotificationTypeEnum) Sender {
 		return &FileMove{}
 	case model.NotifyOpenListUpload:
 		return &OpenListUpload{}
-	case model.NotifyQQ:
-		return &QQ{}
 	}
 	return nil
 }
