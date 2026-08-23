@@ -51,12 +51,6 @@ export let deleteAni = (deleteFiles, ids) => api.post(`api/deleteAni?deleteFiles
 export let about = () => api.post('api/about')
 
 /**
- * 更新
- * @returns {Promise<unknown>}
- */
-export let update = () => api.post('api/update')
-
-/**
  * 获取Mikan番剧列表
  * @param text 关键词
  * @param season 季度
@@ -179,12 +173,6 @@ export let searchBgm = (name) => api.post(`api/searchBgm?name=${name}`)
  * @returns {Promise<unknown>}
  */
 export let testProxy = (url, config) => api.post(`api/testProxy?url=${url}`, config)
-
-/**
- * 下载列表
- * @returns {Promise<unknown>}
- */
-export let torrentsInfos = () => api.post('api/torrentsInfos')
 
 /**
  * 更新总集数

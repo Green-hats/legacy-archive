@@ -26,7 +26,6 @@ func (s *Server) register() {
 	// about
 	r.Handle(http.MethodPost, "/api/about", requireAuth(s.handleAbout))
 	r.Handle(http.MethodPost, "/api/stop", requireAuth(s.handleStop))
-	r.Handle(http.MethodPost, "/api/update", requireAuth(s.handleUpdate))
 
 	// ani
 	r.Handle(http.MethodPost, "/api/addAni", requireAuth(s.handleAddAni))
@@ -60,7 +59,6 @@ func (s *Server) register() {
 	r.Handle(http.MethodPost, "/api/torrentsInfos", requireAuth(s.handleTorrentsInfos))
 	r.Handle(http.MethodPost, "/api/deleteTorrent", requireAuth(s.handleDeleteTorrent))
 	r.Handle(http.MethodPost, "/api/playList", requireAuth(s.handlePlayList))
-	r.Handle(http.MethodPost, "/api/getSubtitles", requireAuth(s.handleGetSubtitles))
 	r.Handle(http.MethodPost, "/api/upload", requireAuth(s.handleUpload))
 
 	// bgm

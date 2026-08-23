@@ -13,7 +13,6 @@ import (
 
 	"ani-rss/internal/config"
 	"ani-rss/internal/download"
-	"ani-rss/internal/matroska"
 	"ani-rss/internal/model"
 	"ani-rss/internal/service"
 	"ani-rss/internal/util"
@@ -274,49 +273,6 @@ func findSubtitles(dir, videoName string) []model.PlaySubtitle {
 		}
 	}
 	return out
-}
-
-// handleGetSubtitles processes POST /api/getSubtitles (mkv embedded subs).
-func (s *Server) handleGetSubtitles(w http.ResponseWriter, r *http.Request) {
-	b64 := r.URL.Query().Get("filename")
-	if b64 == "" {
-		fail(w, "filename 不能为空")
-		return
-	}
-	path, valid := resolveFilePath(b64)
-	if !valid || strings.ToLower(filepath.Ext(path)) != ".mkv" {
-		fail(w, "仅支持 mkv 文件")
-		return
-	}
-	// cloud downloaders (115 / PikPak): the file lives remotely, so embedded
-	// subs can't be read locally — return an empty list instead of failing.
-	if fi, err := os.Stat(path); err != nil || fi.IsDir() {
-		ok(w, []model.PlaySubtitle{})
-		return
-	}
-	subs, err := matroska.ExtractSubtitles(path)
-	if err != nil {
-		fail(w, err.Error())
-		return
-	}
-	var out []model.PlaySubtitle
-	for _, sub := range subs {
-		name := sub.Name
-		if name == "" {
-			name = "embedded"
-		}
-		if sub.Language != "" {
-			name += " [" + sub.Language + "]"
-		}
-		out = append(out, model.PlaySubtitle{
-			HTML:    strings.ToUpper(name),
-			Name:    name,
-			URL:     "",
-			Content: sub.Content,
-			Type:    "vtt",
-		})
-	}
-	ok(w, out)
 }
 
 // handleUpload processes POST /api/upload.

@@ -3,7 +3,6 @@
   <Add ref="addRef"/>
   <Logs ref="logsRef"/>
   <Manage ref="manageRef"/>
-  <TorrentsInfos ref="torrentsInfosRef"/>
   <div class="content">
     <div id="header">
       <div style="margin: 10px;" class="auto-flex">
@@ -63,16 +62,6 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-        </div>
-        <div style="margin: 0 4px;">
-          <el-button bg text @click="torrentsInfosRef?.show">
-            <el-icon :class="elIconClass">
-              <Download/>
-            </el-icon>
-            <template v-if="isNotMobile">
-              下载
-            </template>
-          </el-button>
         </div>
         <div style="margin: 0 4px;">
           <popconfirm title="立即刷新全部订阅?" @confirm="refreshAni">
@@ -139,7 +128,6 @@ import {ElMessage} from "element-plus";
 import Popconfirm from "@/other/Popconfirm.vue";
 import Manage from "./Manage.vue";
 import {useLocalStorage} from "@vueuse/core";
-import TorrentsInfos from "./TorrentsInfos.vue";
 import {elIconClass, initLayout, isNotMobile} from "@/js/global.js";
 import * as http from "@/js/http.js";
 
@@ -148,7 +136,6 @@ const configRef = ref()
 const addRef = ref()
 const logsRef = ref()
 const manageRef = ref()
-const torrentsInfosRef = ref()
 
 const title = ref('')
 const enable = useLocalStorage('select-enable', '已启用')

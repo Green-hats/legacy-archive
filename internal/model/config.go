@@ -131,16 +131,9 @@ type Config struct {
 	TmdbAnime                        bool                  `json:"tmdbAnime"`
 	DownloadToolType                 string                `json:"downloadToolType"`
 	DownloadRetry                    int                   `json:"downloadRetry"`
-	DownloadToolHost                 string                `json:"downloadToolHost"`
-	DownloadToolUsername             string                `json:"downloadToolUsername"`
-	DownloadToolPassword             string                `json:"downloadToolPassword"`
 	PikpakEmail                      string                `json:"pikpakEmail"`
 	PikpakPassword                   string                `json:"pikpakPassword"`
 	Pan115Cookie                     string                `json:"pan115Cookie"`
-	QbUseDownloadPath                bool                  `json:"qbUseDownloadPath"`
-	RatioLimit                       int                   `json:"ratioLimit"`
-	SeedingTimeLimit                 int                   `json:"seedingTimeLimit"`
-	InactiveSeedingTimeLimit         int                   `json:"inactiveSeedingTimeLimit"`
 	DownloadPathTemplate             string                `json:"downloadPathTemplate"`
 	OvaDownloadPathTemplate          string                `json:"ovaDownloadPathTemplate"`
 	CustomTags                       []string              `json:"customTags"`
@@ -254,11 +247,8 @@ func DefaultConfig() *Config {
 		TmdbApi:                         "https://api.themoviedb.org",
 		TmdbApiKey:                      "",
 		TmdbAnime:                       true,
-		DownloadToolType:                "qBittorrent",
+		DownloadToolType:                "115",
 		DownloadRetry:                   3,
-		RatioLimit:                      -2,
-		SeedingTimeLimit:                -2,
-		InactiveSeedingTimeLimit:        -2,
 		DownloadPathTemplate:            "番剧/${title}/Season ${season}",
 		OvaDownloadPathTemplate:         "剧场版/${title}",
 		DelayedDownload:                 0,

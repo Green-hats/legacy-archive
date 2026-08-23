@@ -21,7 +21,6 @@
 - **核心**:RSS 抓取、剧集提取、重命名模板、缺集/摸鱼通知、备用RSS洗版
 - **刮削**:TMDB 刮削(NFO/poster/fanart/bangumi.ini)、Bangumi 搜索/评分/OAuth、Mikan / ani-bt / anime-garden 抓取
 - **通知**:Telegram / Bark / ServerChan / WebHook / Shell / 邮件 / Emby 刷新
-- MKV **内封字幕流式提取**(`matroska`,只读所需字节,不整读大文件)
 
 ## 快速开始(前置依赖)
 
@@ -55,7 +54,7 @@
 - `src/config/Download.vue`:下载器仅 **115** + 115 Cookie 输入;移除下载地址栏及 qBittorrent/Aria2/OpenList 等死分支。
 - `src/home/Config.vue`:移除**捐赠** tab。
 - **移除合集(Collection)与捐赠残留**相关组件/接口。
-- 前端不再调用 `getSubtitles`(后端 `/api/getSubtitles` 与 `matroska` 包保留,API 兼容)。
+- 移除 `getSubtitles`(内封字幕)接口与 `matroska` 包(在线播放已删,无需提取字幕)。
 - 配置与订阅持久化:`config.v2.json` / `ani.v2.json`(与原版格式一致,可无缝迁移)
 - 前端:编译时嵌入 `internal/server/webui`,SPA 回退;`<configDir>/webui` 可覆盖单个文件
 
@@ -74,7 +73,7 @@ internal/
   server/            HTTP 路由、处理器、静态资源(嵌入 webui)
   service/           核心服务(下载引擎、订阅管理、备份、刮削调度)
   task/              后台任务循环(rss/rename/bgm)
-  download/          qBittorrent / Transmission / Aria2 / OpenList / 115 / PikPak(后端保留,前端仅 115)
+  download/          115 / PikPak(云端离线下载;仅 115 在前端暴露)
   rss/               RSS 抓取与解析
   rename/            剧集提取与重命名模板
   bgm/               Bangumi API 客户端
@@ -85,7 +84,6 @@ internal/
   groupregex/        字幕组过滤规则生成
   scrape/            TMDB 刮削(NFO 生成)
   notify/            通知发送器
-  matroska/          MKV 内封字幕流式提取
   util/              工具
 ```
 
@@ -136,11 +134,10 @@ CONFIG=/path/to/config ./ani-rss # 自定义配置目录
 ## 与原版(ani-rss)的差异
 
 - **后端 Go 重写**(替代 Java Spring Boot),API 兼容,可无缝迁移配置
-- **下载器只留网盘**:前端仅 115(云端离线下载);qBittorrent/Transmission/Aria2/OpenList/PikPak 后端代码保留但前端不暴露
+- **下载器只留网盘**:前端仅 115(云端离线下载);后端实现 115 + PikPak
 - **移除在线播放器**(浏览器无法解码 MKV/HEVC),播放全部改为外置播放器跳转
 - **移除捐赠、合集功能**;下载设置去掉地址栏等无关注项
-- 云端播放:`/api/file` 反代 115 CDN 流,支持 Range/seek;`getSubtitles` 对云盘返回空字幕
-- MKV 内封字幕:流式读取,不整读大文件进内存
+- 云端播放:`/api/file` 反代 115 CDN 流,支持 Range/seek
 - MCP server、Swagger UI 暂未实现(默认关闭,不影响使用)
 
 ## 免责声明

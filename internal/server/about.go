@@ -4,12 +4,19 @@ import (
 	"net/http"
 	"strconv"
 
-	"ani-rss/internal/service"
+	"ani-rss/internal/config"
+	"ani-rss/internal/model"
+	"ani-rss/internal/util"
 )
 
-// handleAbout processes POST /api/about.
+// handleAbout processes POST /api/about (版本信息,不检查更新).
 func (s *Server) handleAbout(w http.ResponseWriter, r *http.Request) {
-	ok(w, service.CheckUpdate())
+	cfg := config.Get()
+	ok(w, &model.About{
+		Version:    util.Version,
+		AutoUpdate: cfg.AutoUpdate,
+		Date:       model.DateTime(model.Now()),
+	})
 }
 
 // handleStop processes POST /api/stop (0=restart, 1=shutdown).
@@ -33,13 +40,3 @@ var stopFn = func(shutdown bool) {}
 
 // SetStopFn wires the process stop/restart handler (set by main).
 func SetStopFn(fn func(shutdown bool)) { stopFn = fn }
-
-// handleUpdate processes POST /api/update.
-func (s *Server) handleUpdate(w http.ResponseWriter, r *http.Request) {
-	about := service.CheckUpdate()
-	if !about.Update || about.DownloadURL == "" {
-		okMsg(w, "当前已是最新版本")
-		return
-	}
-	okMsg(w, "更新成功, 正在重启...")
-}
