@@ -29,6 +29,10 @@ type GithubRelease struct {
 	} `json:"assets"`
 }
 
+// githubRepo is the repository used for update checks. 二创版默认关闭更新检查,
+// 发布到自己的 GitHub 后改成 `yourname/ani-rss-go` 即可启用。
+const githubRepo = ""
+
 // CheckUpdate fetches the latest release info (mirrors UpdateService.about()).
 func CheckUpdate() *model.About {
 	cfg := config.Get()
@@ -42,7 +46,12 @@ func CheckUpdate() *model.About {
 		AutoUpdate: cfg.AutoUpdate,
 		Date:       model.DateTime(model.Now()),
 	}
-	req, err := http.NewRequest("GET", "https://api.github.com/repos/wushuo894/ani-rss/releases/latest", nil)
+	// 未配置更新仓库(二创版默认),不做更新检查,避免误报上游版本
+	if githubRepo == "" {
+		cache.Default.PutDuration("github#releases-latest", about, 60*time.Second)
+		return about
+	}
+	req, err := http.NewRequest("GET", "https://api.github.com/repos/"+githubRepo+"/releases/latest", nil)
 	if err != nil {
 		return about
 	}

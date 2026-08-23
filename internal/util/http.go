@@ -16,7 +16,7 @@ import (
 )
 
 // Version is the application version (overridden at build time).
-var Version = "3.2.15"
+var Version = "0.1.0"
 
 // DefaultClient returns an HTTP client honoring config proxy settings.
 func DefaultClient() *http.Client {
@@ -94,7 +94,7 @@ func proxyURL(cfg *model.Config) *url.URL {
 
 // UserAgent returns the standard UA string.
 func UserAgent() string {
-	return "ani-rss/" + Version + " (https://github.com/wushuo894/ani-rss)"
+	return "ani-rss-go/" + Version
 }
 
 // Get fetches a URL with the config UA, returning the response.
