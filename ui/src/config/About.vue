@@ -3,13 +3,13 @@
     <div class="flex about-header">
       <img alt="icon.svg" height="80" src="../../public/icon.svg" width="80"/>
       <div>
-        <h1>ANI-RSS (Go 二创版)</h1>
+        <h1>ANI-RSS Lite</h1>
         <el-text class="mx-1 cursor-pointer" size="small">
           v{{ about.version }}
         </el-text>
         <br/>
         <el-text class="mx-1" size="small" type="info">
-          Go 重写版 · 网盘(115)下载 · 外置播放器播放
+          精简版 · 网盘(115)下载 · 外置播放器播放
         </el-text>
       </div>
     </div>
@@ -19,8 +19,8 @@
     <div class="about-section">
       <h3>项目简介</h3>
       <el-text>
-        基于 RSS 自动追番、订阅、下载、刮削、洗版的工具。后端用 Go 重写,前端基于上游 ani-rss-ui 二创定制。
-        下载走网盘(115 云端离线下载),播放不使用在线播放器,全部通过外置播放器跳转。
+        基于 RSS 自动追番、订阅、下载、刮削、通知的 ani-rss 精简版。后端以 Go 重写,前端按
+        "网盘下载 + 外置播放器播放"重新定制。下载走网盘(115 云端离线下载),播放全部通过外置播放器跳转。
       </el-text>
     </div>
 
@@ -31,7 +31,7 @@
         <li><strong>播放</strong>:PotPlayer / VLC / IINA / MPV / Infuse / 弹弹Play / AnimacX / SenPlayer 跳转播放</li>
         <li><strong>刮削</strong>:TMDB(NFO/poster/fanart)、Bangumi 搜索/评分</li>
         <li><strong>通知</strong>:Telegram / Bark / ServerChan / WebHook / Shell / 邮件 / Emby</li>
-        <li><strong>其他</strong>:RSS 抓取、重命名、缺集/摸鱼检测、备用RSS 洗版</li>
+        <li><strong>其他</strong>:RSS 抓取、重命名、缺集/摸鱼检测、备用 RSS</li>
       </ul>
     </div>
 
