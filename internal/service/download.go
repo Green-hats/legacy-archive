@@ -173,7 +173,7 @@ func DownloadAni(ani *model.Ani) {
 	title := ani.Title
 	items := rss.GetItems(ani)
 	RssOmit(ani, items)
-	log.Debugf("download", "%s 共 %d 个", title, len(items))
+	log.Infof("download", "%s 刷新完成, 共 %d 个条目", title, len(items))
 
 	torrentsInfos := download.GetTorrentsInfos()
 

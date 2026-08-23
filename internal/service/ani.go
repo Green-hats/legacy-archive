@@ -12,6 +12,7 @@ import (
 	"ani-rss/internal/bgm"
 	"ani-rss/internal/config"
 	"ani-rss/internal/download"
+	"ani-rss/internal/log"
 	"ani-rss/internal/model"
 	"ani-rss/internal/rename"
 	"ani-rss/internal/rss"
@@ -317,9 +318,11 @@ func BatchEnable(ids []string, value bool) {
 func RefreshAni(ani *model.Ani) {
 	go func() {
 		time.Sleep(time.Second)
-		if download.Login(true) {
-			DownloadAni(ani)
+		if !download.Login(true) {
+			log.Warnf("refresh", "%s 刷新失败: 115 未登录或 Cookie 无效", ani.Title)
+			return
 		}
+		DownloadAni(ani)
 	}()
 }
 
@@ -328,6 +331,7 @@ func RefreshAll() {
 	go func() {
 		time.Sleep(time.Second)
 		if !download.Login(true) {
+			log.Warn("refresh", "刷新全部失败: 115 未登录或 Cookie 无效")
 			return
 		}
 		for _, ani := range config.AniList() {
