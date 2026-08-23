@@ -63,7 +63,7 @@ func ListAni() *model.ListAni {
 		weekItems[w] = []*model.Ani{}
 	}
 
-	var releaseDateList []string
+	releaseDateList := []string{}
 	seenMonth := map[string]bool{}
 	for i, ani := range sorted {
 		if ani == nil {
@@ -372,8 +372,8 @@ func GetSubjectIdFromAni(ani *model.Ani) string {
 func PreviewAni(ani *model.Ani) map[string]interface{} {
 	items := rss.GetItems(ani)
 	savePath := GetDownloadPath(ani)
-	var omitItems []int
-	var preview []*model.Item
+	omitItems := []int{}
+	preview := []*model.Item{}
 	for _, it := range items {
 		it.HasDownloaded = ItemDownloaded(ani, it, true)
 		preview = append(preview, it)

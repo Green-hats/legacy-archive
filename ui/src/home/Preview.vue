@@ -92,7 +92,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div v-if="data['omitList'].length">
+        <div v-if="(data['omitList'] || []).length">
           <el-alert :title="`缺少集数: ${data['omitList'].slice(0,10).join('、')}`" type="warning" show-icon
                     :closable="false"/>
         </div>
@@ -158,7 +158,7 @@ let show = () => {
 }
 
 let selectChange = () => {
-  showItems.value = data.value.items.filter(selectItems.value.filter(it => it.label === select.value)[0].fun)
+  showItems.value = (data.value.items || []).filter(selectItems.value.filter(it => it.label === select.value)[0].fun)
 }
 
 let showItems = ref([])
