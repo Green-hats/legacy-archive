@@ -15,6 +15,7 @@
 ## 特性
 
 - **下载**:115 云端离线下载(浏览器 Cookie),自动重试、延迟下载、失败重试、同时下载限制、优先保留、自定义标签
+  - > **声明**:PikPak 下载器目前仍在**开发中(试验性)**,可能存在不完善/不稳定之处;当前正式可用的是 **115**。
 - **播放**:播放弹窗仅保留外置播放器按钮(PotPlayer / VLC / IINA / **MPV** / Infuse / 弹弹Play / AnimacX / SenPlayer),无在线播放器
   - 云端文件经 `/api/file` 反代:后端生成 115 直链并**流式透传**(支持 Range/seek、正确 Content-Type),播放器只与本服务通信
   - **MPV**:通过 `mpv-handler://` 协议唤起(见下方安装),OSD/窗口标题显示文件名
@@ -73,7 +74,7 @@ internal/
   server/            HTTP 路由、处理器、静态资源(嵌入 webui)
   service/           核心服务(下载引擎、订阅管理、备份、刮削调度)
   task/              后台任务循环(rss/rename/bgm)
-  download/          115 / PikPak(云端离线下载;仅 115 在前端暴露)
+  download/          115 / PikPak(云端离线下载;仅 115 在前端暴露,PikPak 开发中)
   rss/               RSS 抓取与解析
   rename/            剧集提取与重命名模板
   bgm/               Bangumi API 客户端
@@ -134,7 +135,7 @@ CONFIG=/path/to/config ./ani-rss # 自定义配置目录
 ## 与原版(ani-rss)的差异
 
 - **后端 Go 重写**(替代 Java Spring Boot),API 兼容,可无缝迁移配置
-- **下载器只留网盘**:前端仅 115(云端离线下载);后端实现 115 + PikPak
+- **下载器只留网盘**:前端仅 115(云端离线下载);后端实现 115 + **PikPak(开发中,试验性)**
 - **移除在线播放器**(浏览器无法解码 MKV/HEVC),播放全部改为外置播放器跳转
 - **移除捐赠、合集功能**;下载设置去掉地址栏等无关注项
 - 云端播放:`/api/file` 反代 115 CDN 流,支持 Range/seek
