@@ -1,0 +1,183 @@
+package model
+
+import (
+	"crypto/rand"
+	"fmt"
+)
+
+func newUUID() string {
+	b := make([]byte, 16)
+	if _, err := rand.Read(b); err != nil {
+		panic(err)
+	}
+	b[6] = (b[6] & 0x0f) | 0x40
+	b[8] = (b[8] & 0x3f) | 0x80
+	return fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:16])
+}
+
+// NewUUID returns a random v4 UUID string.
+func NewUUID() string { return newUUID() }
+
+// StandbyRss is one standby RSS source for an Ani.
+type StandbyRss struct {
+	Label  string `json:"label"`
+	URL    string `json:"url"`
+	Offset int    `json:"offset"`
+}
+
+// Tmdb mirrors the external wushuo.tmdb.api Tmdb entity fields used in the app.
+type Tmdb struct {
+	ID           int           `json:"id"`
+	Name         string        `json:"name"`
+	OriginalName string        `json:"originalName"`
+	Date         Date          `json:"date"`
+	TmdbGroupId  string        `json:"tmdbGroupId"`
+	PosterPath   string        `json:"posterPath"`
+	BackdropPath string        `json:"backdropPath"`
+	TmdbType     string        `json:"tmdbType"`
+	Overview     string        `json:"overview"`
+	VoteAverage  float64       `json:"voteAverage"`
+	VoteCount    int           `json:"voteCount"`
+	Tagline      string        `json:"tagline"`
+	Runtime      int           `json:"runtime"`
+	Genres       []TmdbGenre   `json:"genres"`
+	Networks     []TmdbNetwork `json:"networks"`
+	Videos       []TmdbVideo   `json:"videos"`
+	Cast         []TmdbCast    `json:"cast"`
+}
+
+// TmdbGenre is a minimal genre entry.
+type TmdbGenre struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// TmdbNetwork is a production network.
+type TmdbNetwork struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// TmdbVideo is a video/trailer entry.
+type TmdbVideo struct {
+	Key  string `json:"key"`
+	Site string `json:"site"`
+	Name string `json:"name"`
+}
+
+// TmdbCast is a cast member.
+type TmdbCast struct {
+	ID        int    `json:"id"`
+	Name      string `json:"name"`
+	Character string `json:"character"`
+}
+
+// Ani is one subscription, persisted in ani.v2.json as a JSON array.
+type Ani struct {
+	Sort                          int          `json:"sort"`
+	ID                            string       `json:"id"`
+	MikanTitle                    string       `json:"mikanTitle"`
+	URL                           string       `json:"url"`
+	Exists                        bool         `json:"exists"`
+	StandbyRssList                []StandbyRss `json:"standbyRssList"`
+	Title                         string       `json:"title"`
+	JpTitle                       string       `json:"jpTitle"`
+	Offset                        int          `json:"offset"`
+	ReleaseDate                   Date         `json:"releaseDate"`
+	Year                          int          `json:"year"`
+	Month                         int          `json:"month"`
+	Date                          int          `json:"date"`
+	WeekLabel                     string       `json:"weekLabel"`
+	Season                        int          `json:"season"`
+	Cover                         string       `json:"cover"`
+	Image                         string       `json:"image"`
+	Subgroup                      string       `json:"subgroup"`
+	Match                         []string     `json:"match"`
+	Exclude                       []string     `json:"exclude"`
+	GlobalExclude                 bool         `json:"globalExclude"`
+	Ova                           bool         `json:"ova"`
+	Pinyin                        string       `json:"pinyin"`
+	PinyinInitials                string       `json:"pinyinInitials"`
+	Enable                        bool         `json:"enable"`
+	CurrentEpisodeNumber          int          `json:"currentEpisodeNumber"`
+	TotalEpisodeNumber            int          `json:"totalEpisodeNumber"`
+	ThemoviedbName                string       `json:"themoviedbName"`
+	Type                          string       `json:"type"`
+	BgmUrl                        string       `json:"bgmUrl"`
+	CustomDownloadPath            bool         `json:"customDownloadPath"`
+	CustomDownloadPathTemplate    string       `json:"customDownloadPathTemplate"`
+	Score                         float64      `json:"score"`
+	CustomEpisode                 bool         `json:"customEpisode"`
+	CustomEpisodeStr              string       `json:"customEpisodeStr"`
+	CustomEpisodeGroupIndex       int          `json:"customEpisodeGroupIndex"`
+	Omit                          bool         `json:"omit"`
+	DownloadNew                   bool         `json:"downloadNew"`
+	NotDownload                   []float64    `json:"notDownload"`
+	Tmdb                          *Tmdb        `json:"tmdb"`
+	Upload                        bool         `json:"upload"`
+	Procrastinating               bool         `json:"procrastinating"`
+	CustomRenameTemplateEnable    bool         `json:"customRenameTemplateEnable"`
+	CustomRenameTemplate          string       `json:"customRenameTemplate"`
+	CustomPriorityKeywordsEnable  bool         `json:"customPriorityKeywordsEnable"`
+	CustomPriorityKeywords        []string     `json:"customPriorityKeywords"`
+	LastDownloadTime              int64        `json:"lastDownloadTime"`
+	CustomUploadEnable            bool         `json:"customUploadEnable"`
+	CustomUploadPathTarget        string       `json:"customUploadPathTarget"`
+	Message                       bool         `json:"message"`
+	Completed                     bool         `json:"completed"`
+	CustomCompleted               bool         `json:"customCompleted"`
+	CustomCompletedPathTemplate   string       `json:"customCompletedPathTemplate"`
+	CustomTagsEnable              bool         `json:"customTagsEnable"`
+	CustomTags                    []string     `json:"customTags"`
+}
+
+// Clone returns a shallow copy of the Ani.
+func (a *Ani) Clone() *Ani {
+	if a == nil {
+		return nil
+	}
+	c := *a
+	c.StandbyRssList = append([]StandbyRss(nil), a.StandbyRssList...)
+	c.Match = append([]string(nil), a.Match...)
+	c.Exclude = append([]string(nil), a.Exclude...)
+	c.NotDownload = append([]float64(nil), a.NotDownload...)
+	c.CustomPriorityKeywords = append([]string(nil), a.CustomPriorityKeywords...)
+	c.CustomTags = append([]string(nil), a.CustomTags...)
+	if a.Tmdb != nil {
+		t := *a.Tmdb
+		c.Tmdb = &t
+	}
+	return &c
+}
+
+// DefaultAni returns the factory defaults used by AniUtil.createAni().
+func DefaultAni() *Ani {
+	return &Ani{
+		ID:                       newUUID(),
+		StandbyRssList:           []StandbyRss{},
+		Offset:                   0,
+		ReleaseDate:              Date(Now()),
+		Enable:                   true,
+		Ova:                      false,
+		Score:                    0,
+		LastDownloadTime:         0,
+		Image:                    "",
+		ThemoviedbName:           "",
+		CustomDownloadPath:       false,
+		CurrentEpisodeNumber:     0,
+		TotalEpisodeNumber:       0,
+		Match:                    []string{},
+		Exclude:                  []string{"720[Pp]", "\\d-\\d", "合集", "特别篇"},
+		BgmUrl:                   "",
+		Subgroup:                 "",
+		Omit:                     true,
+		DownloadNew:              false,
+		NotDownload:              []float64{},
+		Upload:                   true,
+		Procrastinating:          true,
+		CustomRenameTemplate:     "[${subgroup}] ${title} S${seasonFormat}E${episodeFormat}",
+		Message:                  true,
+		Completed:                true,
+		CustomEpisodeGroupIndex:  2,
+	}
+}

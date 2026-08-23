@@ -1,0 +1,22 @@
+#!/bin/bash
+# mpv wrapper: 把 --title 的值同时传给 --force-media-title,
+# 让 mpv 的 OSD(media-title)也显示文件名,而不只是窗口标题。
+args=()
+force=""
+for a in "$@"; do
+  if [[ "$a" == --title=* ]]; then
+    force="${a#--title=}"
+    args+=("$a")
+  elif [[ "$a" == "--" ]]; then
+    if [[ -n "$force" ]]; then
+      args+=("--force-media-title=$force")
+    fi
+    args+=("$a")
+  else
+    args+=("$a")
+  fi
+done
+if [[ -n "$force" ]] && ! [[ " ${args[*]} " == *" -- "* ]]; then
+  args+=("--force-media-title=$force")
+fi
+exec /usr/bin/mpv "${args[@]}"
