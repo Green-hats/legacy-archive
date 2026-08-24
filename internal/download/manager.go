@@ -11,7 +11,31 @@ import (
 var (
 	mu      sync.RWMutex
 	current Client
+
+	loginStatusMu sync.Mutex
+	loginStatus   LoginStatus
 )
+
+// LoginStatus describes the latest download-client login result.
+type LoginStatus struct {
+	Configured bool   `json:"configured"`
+	OK         bool   `json:"loginOK"`
+	Message    string `json:"message"`
+}
+
+// SetLoginStatus records the latest client login result.
+func SetLoginStatus(s LoginStatus) {
+	loginStatusMu.Lock()
+	loginStatus = s
+	loginStatusMu.Unlock()
+}
+
+// GetLoginStatus returns the latest client login result.
+func GetLoginStatus() LoginStatus {
+	loginStatusMu.Lock()
+	defer loginStatusMu.Unlock()
+	return loginStatus
+}
 
 // Type returns the normalized download client for the configured tool type.
 // When the config tool type changes the client is rebuilt lazily.

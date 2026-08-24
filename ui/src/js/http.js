@@ -260,6 +260,12 @@ export let clearCache = () => api.post('api/clearCache')
 export let downloadLoginTest = (config) => api.post('api/downloadLoginTest', config)
 
 /**
+ * 获取下载客户端登录状态
+ * @returns {Promise<unknown>}
+ */
+export let downloadStatus = () => api.post('api/downloadStatus')
+
+/**
  * 获取TG最近消息
  * @param notificationConfig 通知配置
  * @returns {Promise<unknown>}

@@ -17,6 +17,8 @@ var (
 	logFile  *os.File
 	logsDir  string
 	maxSize  = 128
+	// maxFileSize is the log file size cap (10 MiB) before rotating.
+	maxFileSize int64 = 10 * 1024 * 1024
 )
 
 // Init sets up the log file under the config dir.
@@ -57,11 +59,31 @@ func Write(level, loggerName, msg string) {
 	if len(entries) > maxSize {
 		entries = entries[len(entries)-maxSize:]
 	}
-	mu.Unlock()
+	rotateIfNeeded()
 	if logFile != nil {
 		ts := time.Now().Format("2006-01-02 15:04:05")
 		fmt.Fprintf(logFile, "%s %-5s [%s] %s\n", ts, level, loggerName, msg)
 	}
+	mu.Unlock()
+}
+
+// rotateIfNeeded rolls the log file when it exceeds maxFileSize. Caller holds mu.
+func rotateIfNeeded() {
+	if logFile == nil {
+		return
+	}
+	fi, err := logFile.Stat()
+	if err != nil || fi.Size() < maxFileSize {
+		return
+	}
+	logFile.Close()
+	path := filepath.Join(logsDir, "ani-rss.log")
+	_ = os.Rename(path, filepath.Join(logsDir, "ani-rss.log.1"))
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
+	if err != nil {
+		return
+	}
+	logFile = f
 }
 
 // Info writes an info log.

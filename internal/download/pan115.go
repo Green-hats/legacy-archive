@@ -74,18 +74,22 @@ func (p *Pan115) request(method, rawURL string, form url.Values) (map[string]int
 func (p *Pan115) Login(test bool, cfg *model.Config) bool {
 	if strings.TrimSpace(cfg.Pan115Cookie) == "" {
 		warnOnce("pan115-missing-config", "115 未配置完成")
+		SetLoginStatus(LoginStatus{Configured: false, Message: "115 未配置 Cookie"})
 		return false
 	}
 	m, err := p.request("GET", "https://webapi.115.com/files?aid=1&cid=0&o=user_ptime&asc=0&offset=0&show_dir=1&limit=1&show_all=0", nil)
 	if err != nil {
 		utilLogErr("登录 115 失败 %v", err)
+		SetLoginStatus(LoginStatus{Configured: true, Message: "115 登录失败: " + err.Error()})
 		return false
 	}
 	state, _ := m["state"].(bool)
 	if !state {
 		utilLogErr("115 Cookie 无效或已过期")
+		SetLoginStatus(LoginStatus{Configured: true, Message: "115 Cookie 无效或已过期"})
 		return false
 	}
+	SetLoginStatus(LoginStatus{Configured: true, OK: true})
 	return true
 }
 

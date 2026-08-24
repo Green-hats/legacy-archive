@@ -19,6 +19,7 @@ func (s *Server) register() {
 	r.Handle(http.MethodPost, "/api/clearCache", requireAuth(s.handleClearCache))
 	r.Handle(http.MethodPost, "/api/testProxy", requireAuth(s.handleTestProxy))
 	r.Handle(http.MethodPost, "/api/downloadLoginTest", requireAuth(s.handleDownloadLoginTest))
+	r.Handle(http.MethodPost, "/api/downloadStatus", requireAuth(s.handleDownloadStatus))
 	r.Handle(http.MethodGet, "/api/exportConfig", requireAuth(s.handleExportConfig))
 	r.Handle(http.MethodPost, "/api/importConfig", requireAuth(s.handleImportConfig))
 

@@ -52,11 +52,14 @@ func (p *PikPak) Login(test bool, cfg *model.Config) bool {
 	if err != nil {
 		if strings.Contains(err.Error(), "未配置") {
 			warnOnce("pikpak-missing-config", "PikPak 未配置完成")
+			SetLoginStatus(LoginStatus{Configured: false, Message: "PikPak 未配置"})
 		} else {
 			utilLogErr("登录 PikPak 失败 %v", err)
+			SetLoginStatus(LoginStatus{Configured: true, Message: "PikPak 登录失败: " + err.Error()})
 		}
 		return false
 	}
+	SetLoginStatus(LoginStatus{Configured: true, OK: true})
 	return true
 }
 

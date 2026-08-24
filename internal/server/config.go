@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"ani-rss/internal/config"
+	"ani-rss/internal/download"
 	"ani-rss/internal/model"
 	"ani-rss/internal/service"
 )
@@ -80,6 +81,11 @@ func (s *Server) handleDownloadLoginTest(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	okMsg(w, "登录成功")
+}
+
+// handleDownloadStatus processes POST /api/downloadStatus.
+func (s *Server) handleDownloadStatus(w http.ResponseWriter, r *http.Request) {
+	ok(w, download.GetLoginStatus())
 }
 
 // handlePing handles ANY /api/ping.

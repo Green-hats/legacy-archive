@@ -4,6 +4,8 @@
   <Logs ref="logsRef"/>
   <Manage ref="manageRef"/>
   <div class="content">
+    <el-alert v-if="downloadStatus.alert" :title="downloadStatus.message" type="warning" show-icon
+              :closable="false" class="download-status-alert"/>
     <div id="header">
       <div style="margin: 10px;" class="auto-flex">
         <div>
@@ -178,6 +180,8 @@ const about = ref({
   'markdownBody': ''
 })
 
+const downloadStatus = ref({})
+
 let refreshAni = () => {
   http.refreshAll()
       .then(res => {
@@ -193,6 +197,12 @@ onMounted(() => {
       .then(res => {
         about.value = res.data
       })
+  http.downloadStatus()
+      .then(res => {
+        let s = res.data || {}
+        s.alert = !s.configured || !s.loginOK
+        downloadStatus.value = s
+      })
 })
 </script>
 
@@ -207,6 +217,10 @@ onMounted(() => {
   margin: 10px;
   display: flex;
   justify-content: flex-end;
+}
+
+.download-status-alert {
+  margin: 0 10px;
 }
 </style>
 
