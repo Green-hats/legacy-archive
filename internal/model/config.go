@@ -121,7 +121,6 @@ type Config struct {
 	OvaDownloadPathTemplate          string                `json:"ovaDownloadPathTemplate"`
 	DelayedDownload                  int                   `json:"delayedDownload"`
 	RssSleepMinutes                  int                   `json:"rssSleepMinutes"`
-	RenameSleepSeconds               int                   `json:"renameSleepSeconds"`
 	Rename                           bool                  `json:"rename"`
 	Rss                              bool                  `json:"rss"`
 	RssTimeout                       int                   `json:"rssTimeout"`
@@ -178,15 +177,10 @@ TmdbIdPlexMode                   bool                  `json:"tmdbIdPlexMode"`
 	ProcrastinatingDay               int                   `json:"procrastinatingDay"`
 	UpdateTotalEpisodeNumber         bool                  `json:"updateTotalEpisodeNumber"`
 	ForceUpdateTotalEpisodeNumber    bool                  `json:"forceUpdateTotalEpisodeNumber"`
-	OpenListDownloadTimeout          int                   `json:"openListDownloadTimeout"`
-	Completed                        bool                  `json:"completed"`
-	CompletedPathTemplate            string                `json:"completedPathTemplate"`
+	DownloadTimeout                   int                   `json:"downloadTimeout"`
 	NotificationConfigList           []NotificationConfig  `json:"notificationConfigList"`
 	CopyMasterToStandby              bool                  `json:"copyMasterToStandby"`
 	SortType                         string                `json:"sortType"`
-	Scrape                           bool                  `json:"scrape"`
-	FollowDay                        int                   `json:"followDay"`
-	BangumiIniEnabled                bool                  `json:"bangumiIniEnabled"`
 	Replace                          bool                  `json:"replace"`
 	MaxFileNameLength                int                   `json:"maxFileNameLength"`
 	LimitLoginAttempts               bool                  `json:"limitLoginAttempts"`
@@ -211,7 +205,6 @@ func DefaultConfig() *Config {
 		OvaDownloadPathTemplate:         "剧场版/${title}",
 		DelayedDownload:                 0,
 		RssSleepMinutes:                 15,
-		RenameSleepSeconds:              10,
 		Rename:                          true,
 		Rss:                             true,
 		RssTimeout:                      20,
@@ -230,9 +223,8 @@ func DefaultConfig() *Config {
 		CustomEpisodeGroupIndex:         2,
 		CustomEpisodeStr:                renameRegStr,
 		ProcrastinatingDay:              14,
-		OpenListDownloadTimeout:         60,
+		DownloadTimeout:                 60,
 		SortType:                        "SCORE",
-		FollowDay:                       14,
 		LimitLoginAttempts:              true,
 		ReverseProxyTrustIpList:         []string{"127.0.0.1"},
 		BgmApi:                          "https://api.bgm.tv",

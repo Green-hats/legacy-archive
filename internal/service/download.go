@@ -29,9 +29,6 @@ var (
 // SeasonEpisodeRe exposes the SxxExx regex for other packages.
 var SeasonEpisodeRe = regSeasonEp
 
-// ScrapeFn is wired by the scrape package to run TMDB scraping for an ani.
-var ScrapeFn func(ani *model.Ani, force bool) error
-
 // GetDownloadPath resolves the download path template for an ani.
 func GetDownloadPath(ani *model.Ani) string {
 	return getDownloadPath(ani, config.Get())
@@ -566,50 +563,3 @@ func RssCurrentEpisodeNumber(ani *model.Ani, items []*model.Item) int {
 	return len(cleaned)
 }
 
-// Notification is the completion hook: tag 下载完成, notify DOWNLOAD_END,
-// scrape if enabled, migrate completed subscriptions.
-func Notification(t *model.TorrentsInfo) {
-	cfg := config.Get()
-	if !t.Finished() {
-		return
-	}
-	if t.HasTag(model.TagDownloadDone) {
-		return
-	}
-	if !download.Type().AddTags(t, model.TagDownloadDone) {
-		return
-	}
-	ani := FindAniByDownloadPath(t)
-	if ani == nil {
-		log.Debugf("download", "未能获取番剧对象: %s", t.Name)
-		return
-	}
-	subgroup := ani.Subgroup
-	standbyLabels := map[string]bool{}
-	for _, sr := range ani.StandbyRssList {
-		standbyLabels[sr.Label] = true
-	}
-	for _, tag := range t.TagList {
-		if standbyLabels[tag] {
-			subgroup = tag
-			break
-		}
-	}
-	if strings.TrimSpace(subgroup) == "" {
-		subgroup = "未知字幕组"
-	}
-	ani.Subgroup = subgroup
-
-	text := fmt.Sprintf("%s 下载完成", t.Name)
-	if t.HasTag(model.TagStandbyRss) {
-		text = fmt.Sprintf("(备用RSS) %s", text)
-	}
-	notify.Send(cfg, ani, text, model.NotifyDownloadEnd)
-
-	if cfg.Scrape && ScrapeFn != nil {
-		if err := ScrapeFn(ani, false); err != nil {
-			log.Errorf("download", "刮削失败: %s %v", ani.Title, err)
-		}
-	}
-	Completed(ani)
-}

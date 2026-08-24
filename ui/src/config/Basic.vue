@@ -9,9 +9,6 @@
     <el-collapse-item name="rename" title="重命名设置">
       <rename :config="props.config"/>
     </el-collapse-item>
-    <el-collapse-item name="scrape" title="刮削设置">
-      <scrape :config="props.config"/>
-    </el-collapse-item>
     <el-collapse-item name="rss" title="RSS设置">
       <rss :config="props.config"/>
     </el-collapse-item>
@@ -36,7 +33,6 @@ import Rss from "@/config/basic/Rss.vue";
 import Other from "@/config/basic/Other.vue";
 import Bangumi from "@/config/basic/Bangumi.vue";
 import Backup from "./basic/Backup.vue";
-import Scrape from "@/config/basic/Scrape.vue";
 
 let activeName = ref('page')
 

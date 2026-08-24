@@ -198,9 +198,6 @@ func fillConfigDefaults(c, def *model.Config, present map[string]bool) {
 	if !present["rssSleepMinutes"] {
 		c.RssSleepMinutes = def.RssSleepMinutes
 	}
-	if !present["renameSleepSeconds"] {
-		c.RenameSleepSeconds = def.RenameSleepSeconds
-	}
 	if !present["rename"] {
 		c.Rename = def.Rename
 	}
@@ -255,14 +252,11 @@ func fillConfigDefaults(c, def *model.Config, present map[string]bool) {
 	if !present["procrastinatingDay"] {
 		c.ProcrastinatingDay = def.ProcrastinatingDay
 	}
-	if !present["openListDownloadTimeout"] {
-		c.OpenListDownloadTimeout = def.OpenListDownloadTimeout
+	if !present["downloadTimeout"] {
+		c.DownloadTimeout = def.DownloadTimeout
 	}
 	if !present["sortType"] {
 		c.SortType = def.SortType
-	}
-	if !present["followDay"] {
-		c.FollowDay = def.FollowDay
 	}
 	if !present["limitLoginAttempts"] {
 		c.LimitLoginAttempts = def.LimitLoginAttempts

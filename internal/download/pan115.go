@@ -227,7 +227,7 @@ func (p *Pan115) Download(ani *model.Ani, item *model.Item, savePath, torrentPat
 	}
 	utilLogInfo("115 添加离线下载成功 %s", reName)
 
-	timeout := config.Get().OpenListDownloadTimeout
+	timeout := config.Get().DownloadTimeout
 	if timeout <= 0 {
 		timeout = 60
 	}
@@ -273,15 +273,6 @@ func (p *Pan115) notifyDone(ani *model.Ani, item *model.Item) {
 
 // Delete is unsupported by 115.
 func (p *Pan115) Delete(t *model.TorrentsInfo, deleteFiles bool) bool { return false }
-
-// Rename is unsupported by 115.
-func (p *Pan115) Rename(t *model.TorrentsInfo) bool { return false }
-
-// AddTags is unsupported by 115.
-func (p *Pan115) AddTags(t *model.TorrentsInfo, tags string) bool { return false }
-
-// UpdateTrackers is unsupported by 115.
-func (p *Pan115) UpdateTrackers(trackers []string) {}
 
 // SetSavePath is unsupported by 115.
 func (p *Pan115) SetSavePath(t *model.TorrentsInfo, path string) {}

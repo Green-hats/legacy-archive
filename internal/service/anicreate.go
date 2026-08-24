@@ -199,7 +199,6 @@ func RssToAni(dto *model.RssToAniDTO) (*model.Ani, error) {
 
 	// download path templates
 	ani.CustomDownloadPathTemplate = GetDownloadPath(ani)
-	ani.CustomCompletedPathTemplate = cfg.CompletedPathTemplate
 	return ani, nil
 }
 

@@ -177,18 +177,6 @@
                 </div>
               </div>
             </el-form-item>
-            <el-form-item label="自定义完结迁移">
-              <div class="full-width">
-                <div>
-                  <el-switch v-model="props.ani.customCompleted"/>
-                </div>
-                <div>
-                  <el-input type="textarea" class="full-width" :disabled="!props.ani.customCompleted"
-                            :autosize="{ minRows: 2}"
-                            v-model:model-value="props.ani.customCompletedPathTemplate"/>
-                </div>
-              </div>
-            </el-form-item>
             <el-form-item label="重命名模版">
               <div class="full-width">
                 <el-switch v-model="props.ani['customRenameTemplateEnable']"/>
@@ -231,7 +219,6 @@
               <el-checkbox v-model="props.ani.downloadNew" label="只下载最新集"/>
               <el-checkbox v-model="props.ani['procrastinating']" label="摸鱼检测"/>
               <el-checkbox v-model="props.ani['message']" label="通知"/>
-              <el-checkbox v-model="props.ani['completed']" label="完结迁移"/>
             </el-form-item>
           </el-form>
         </el-scrollbar>
@@ -252,22 +239,6 @@
                   <RefreshRight/>
                 </el-icon>
                 刷新
-              </el-text>
-            </el-dropdown-item>
-            <el-dropdown-item @click="scrape(false)">
-              <el-text>
-                <el-icon>
-                  <RefreshRight/>
-                </el-icon>
-                刮削
-              </el-text>
-            </el-dropdown-item>
-            <el-dropdown-item @click="scrape(true)">
-              <el-text type="warning">
-                <el-icon>
-                  <Refresh/>
-                </el-icon>
-                刮削 [F]
               </el-text>
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -413,13 +384,6 @@ let mikanCallback = v => {
   props.ani.match = props.ani.match.filter(it => it.indexOf(`{{${subgroup}}}:`) !== 0)
 
   props.ani.match.push(...newMatch)
-}
-
-let scrape = (force) => {
-  http.scrape(force, props.ani)
-      .then(res => {
-        ElMessage.success(res.message)
-      })
 }
 
 let animeGardenShow = () => {

@@ -18,7 +18,6 @@ import (
 	"ani-rss/internal/model"
 	"ani-rss/internal/notify"
 	"ani-rss/internal/rename"
-	"ani-rss/internal/scrape"
 	"ani-rss/internal/server"
 	"ani-rss/internal/service"
 	"ani-rss/internal/task"
@@ -126,11 +125,9 @@ func wireHooks() {
 	notify.LogMsg = func(msg string) { log.Info("notification", msg) }
 
 	download.SetFindAniHook(service.FindAniByDownloadPath)
-	service.ScrapeFn = scrape.Scrape
 	service.RestartTasks = task.Restart
 	service.ClearInMemoryCache = func() { cache.Default.Clear() }
 	service.SetCacheSizeFunc(func() int { return cache.Default.Size() })
 	util.SetLogWarn(func(logger, msg string) { log.Warn(logger, msg) })
 	bgm.SaveCoverFn = service.SaveCover
-	scrape.SetBgmSubjectIdHook(func(ani *model.Ani) string { return bgm.GetSubjectId(ani) })
 }

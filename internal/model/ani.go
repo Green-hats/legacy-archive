@@ -116,9 +116,6 @@ type Ani struct {
 	CustomPriorityKeywords        []string     `json:"customPriorityKeywords"`
 	LastDownloadTime              int64        `json:"lastDownloadTime"`
 	Message                       bool         `json:"message"`
-	Completed                     bool         `json:"completed"`
-	CustomCompleted               bool         `json:"customCompleted"`
-	CustomCompletedPathTemplate   string       `json:"customCompletedPathTemplate"`
 	CustomTagsEnable              bool         `json:"customTagsEnable"`
 	CustomTags                    []string     `json:"customTags"`
 }
@@ -168,7 +165,6 @@ func DefaultAni() *Ani {
 		Procrastinating:          true,
 		CustomRenameTemplate:     "[${subgroup}] ${title} S${seasonFormat}E${episodeFormat}",
 		Message:                  true,
-		Completed:                true,
 		CustomEpisodeGroupIndex:  2,
 	}
 }

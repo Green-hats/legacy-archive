@@ -4,15 +4,6 @@
     <el-form-item label="自动重命名">
       <el-switch v-model:model-value="props.config.rename"/>
     </el-form-item>
-    <el-form-item label="重命名间隔">
-      <el-input-number v-model:model-value="props.config['renameSleepSeconds']"
-                       :disabled="!config.rename"
-                       :min="5">
-        <template #suffix>
-          <span>秒</span>
-        </template>
-      </el-input-number>
-    </el-form-item>
     <el-form-item label="最大文件名长度">
       <el-input-number v-model:model-value="props.config.maxFileNameLength" :min="0"/>
     </el-form-item>

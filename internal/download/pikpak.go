@@ -89,7 +89,7 @@ func (p *PikPak) Download(ani *model.Ani, item *model.Item, savePath, torrentPat
 	utilLogInfo("PikPak 添加离线下载成功 %s", reName)
 
 	// wait for completion (mirrors OpenList behavior with a generous timeout)
-	timeout := config.Get().OpenListDownloadTimeout
+	timeout := config.Get().DownloadTimeout
 	if timeout <= 0 {
 		timeout = 60
 	}
@@ -118,15 +118,6 @@ func (p *PikPak) Download(ani *model.Ani, item *model.Item, savePath, torrentPat
 
 // Delete is unsupported by PikPak.
 func (p *PikPak) Delete(t *model.TorrentsInfo, deleteFiles bool) bool { return false }
-
-// Rename is unsupported by PikPak.
-func (p *PikPak) Rename(t *model.TorrentsInfo) bool { return false }
-
-// AddTags is unsupported by PikPak.
-func (p *PikPak) AddTags(t *model.TorrentsInfo, tags string) bool { return false }
-
-// UpdateTrackers is unsupported by PikPak.
-func (p *PikPak) UpdateTrackers(trackers []string) {}
 
 // SetSavePath is unsupported by PikPak.
 func (p *PikPak) SetSavePath(t *model.TorrentsInfo, path string) {}

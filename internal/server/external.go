@@ -7,7 +7,6 @@ import (
 	"ani-rss/internal/config"
 	"ani-rss/internal/mikan"
 	"ani-rss/internal/model"
-	"ani-rss/internal/scrape"
 	"ani-rss/internal/service"
 	"ani-rss/internal/tmdb"
 )
@@ -81,36 +80,6 @@ func (s *Server) handleThemoviedbGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ok(w, groups)
-}
-
-// handleScrape processes POST /api/scrape.
-func (s *Server) handleScrape(w http.ResponseWriter, r *http.Request) {
-	var body model.Ani
-	if !readJSONOrFail(w, r, &body) {
-		return
-	}
-	force, _ := strconv.ParseBool(r.URL.Query().Get("force"))
-	go func() {
-		_ = scrape.Scrape(&body, force)
-	}()
-	okMsg(w, "已开始刮削 "+body.Title)
-}
-
-// handleBatchScrape processes POST /api/batchScrape.
-func (s *Server) handleBatchScrape(w http.ResponseWriter, r *http.Request) {
-	var ids []string
-	if !readJSONOrFail(w, r, &ids) {
-		return
-	}
-	force, _ := strconv.ParseBool(r.URL.Query().Get("force"))
-	go func() {
-		for _, ani := range config.AniList() {
-			if ani != nil && contains(ids, ani.ID) {
-				_ = scrape.Scrape(ani, force)
-			}
-		}
-	}()
-	okMsg(w, "已开始刮削")
 }
 
 // handleEmbyViews processes POST /api/getEmbyViews.

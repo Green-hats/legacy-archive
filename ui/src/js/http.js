@@ -183,14 +183,6 @@ export let testProxy = (url, config) => api.post(`api/testProxy?url=${url}`, con
 export let updateTotalEpisodeNumber = (force, ids) => api.post(`api/updateTotalEpisodeNumber?force=${force}`, ids)
 
 /**
- * 批量刮削
- * @param force 强制
- * @param ids ids
- * @returns {Promise<unknown>}
- */
-export let batchScrape = (force, ids) => api.post(`api/batchScrape?force=${force}`, ids)
-
-/**
  * 批量 启用/禁用 订阅
  * @param value true/false
  * @param ids ids
@@ -239,14 +231,6 @@ export let setRate = (ani) => api.post('api/setRate', ani)
  * @returns {Promise<unknown>}
  */
 export let downloadPath = (ani) => api.post('api/downloadPath', ani)
-
-/**
- * 刮削
- * @param force 强制 true/false
- * @param ani 订阅
- * @returns {Promise<unknown>}
- */
-export let scrape = (force, ani) => api.post(`api/scrape?force=${force}`, ani)
 
 /**
  * 获取当前BGM账号信息

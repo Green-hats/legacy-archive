@@ -44,9 +44,6 @@ type Client interface {
 	GetTorrentsInfos() []*model.TorrentsInfo
 	Download(ani *model.Ani, item *model.Item, savePath string, torrentPath string) bool
 	Delete(t *model.TorrentsInfo, deleteFiles bool) bool
-	Rename(t *model.TorrentsInfo) bool
-	AddTags(t *model.TorrentsInfo, tags string) bool
-	UpdateTrackers(trackers []string)
 	SetSavePath(t *model.TorrentsInfo, path string)
 }
 

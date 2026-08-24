@@ -398,33 +398,3 @@ func DownloadPathPreview(ani *model.Ani) map[string]interface{} {
 		"downloadPath": GetDownloadPath(ani),
 	}
 }
-
-// Completed migrates a finished subscription to the completed path.
-func Completed(ani *model.Ani) {
-	cfg := config.Get()
-	if !ani.Completed || !cfg.AutoDisabled || !cfg.Completed || ani.Enable || ani.TotalEpisodeNumber < 1 || ani.CurrentEpisodeNumber < ani.TotalEpisodeNumber || ani.Ova {
-		return
-	}
-	newPath := GetDownloadPathTemplate(ani, cfg.CompletedPathTemplate)
-	oldPath := GetDownloadPath(ani)
-	if newPath == oldPath {
-		return
-	}
-	for _, t := range FindTorrentsInfosByAni(ani) {
-		download.Type().SetSavePath(t, newPath)
-	}
-	moveLocalFiles(oldPath, newPath)
-}
-
-func moveLocalFiles(from, to string) {
-	entries, err := os.ReadDir(from)
-	if err != nil {
-		return
-	}
-	if err := os.MkdirAll(to, 0o755); err != nil {
-		return
-	}
-	for _, e := range entries {
-		_ = os.Rename(filepath.Join(from, e.Name()), filepath.Join(to, e.Name()))
-	}
-}

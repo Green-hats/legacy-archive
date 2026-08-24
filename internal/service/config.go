@@ -23,7 +23,6 @@ import (
 func SetConfigRaw(raw []byte) error {
 	cur := config.Get()
 	oldRssSleep := cur.RssSleepMinutes
-	oldRenameSleep := cur.RenameSleepSeconds
 	oldTool := cur.DownloadToolType
 	if err := config.MergeConfigInto(cur, raw); err != nil {
 		return err
@@ -32,7 +31,7 @@ func SetConfigRaw(raw []byte) error {
 		return err
 	}
 	// restart task loops when timing changed
-	if oldRssSleep != cur.RssSleepMinutes || oldRenameSleep != cur.RenameSleepSeconds {
+	if oldRssSleep != cur.RssSleepMinutes {
 		RestartTasks()
 	}
 	// rebuild download client when tool changed

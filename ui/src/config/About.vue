@@ -19,7 +19,7 @@
     <div class="about-section">
       <h3>项目简介</h3>
       <el-text>
-        基于 RSS 自动追番、订阅、下载、刮削、通知的 ani-rss 精简版。后端以 Go 重写,前端按
+        基于 RSS 自动追番、订阅、下载、命名、通知的 ani-rss 精简版。后端以 Go 重写,前端按
         "网盘下载 + 外置播放器播放"重新定制。下载走网盘(115 云端离线下载),播放全部通过外置播放器跳转。
       </el-text>
     </div>
@@ -29,7 +29,7 @@
       <ul class="about-list">
         <li><strong>下载</strong>:115 云端离线下载(浏览器 Cookie)</li>
         <li><strong>播放</strong>:PotPlayer / VLC / IINA / MPV / Infuse / 弹弹Play / AnimacX / SenPlayer 跳转播放</li>
-        <li><strong>刮削</strong>:TMDB(NFO/poster/fanart)、Bangumi 搜索/评分</li>
+        <li><strong>元数据</strong>:TMDB 标题命名、Bangumi 搜索/评分</li>
         <li><strong>通知</strong>:Telegram / Bark / ServerChan / WebHook / Shell / 邮件 / Emby</li>
         <li><strong>其他</strong>:RSS 抓取、重命名、缺集/摸鱼检测、备用 RSS</li>
       </ul>

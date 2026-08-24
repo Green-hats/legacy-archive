@@ -19,7 +19,7 @@ var (
 	stopCh  chan struct{}
 )
 
-// Start launches the three background loops: rename-task, rss-task, bgm-task.
+// Start launches the background loops: rss-task, bgm-task.
 func Start() {
 	mu.Lock()
 	defer mu.Unlock()
@@ -28,7 +28,6 @@ func Start() {
 	}
 	running.Store(true)
 	stopCh = make(chan struct{})
-	go loop("rename-task", stopCh, RenameLoop)
 	go loop("rss-task", stopCh, RssLoop)
 	go loop("bgm-task", stopCh, BgmLoop)
 }
@@ -87,34 +86,6 @@ func SyncDownload(list []*model.Ani) {
 	}
 }
 
-// RenameLoop processes completion: rename, notify, delete.
-func RenameLoop(stop <-chan struct{}) {
-	cfg := config.Get()
-	if !download.Login(true) {
-		sleepSeconds(stop, cfg.RenameSleepSeconds)
-		return
-	}
-	for _, t := range download.GetTorrentsInfos() {
-		if t == nil {
-			continue
-		}
-		RenameAndNotify(t)
-	}
-	sleepSeconds(stop, cfg.RenameSleepSeconds)
-}
-
-// RenameAndNotify renames a torrent and triggers completion hooks.
-func RenameAndNotify(t *model.TorrentsInfo) {
-	cfg := config.Get()
-	if cfg.Rename && !t.HasTag(model.TagRename) {
-		if download.Type().Rename(t) {
-			download.Type().AddTags(t, model.TagRename)
-		}
-	}
-	service.Notification(t)
-	service.DeleteTorrent(t, false, false)
-}
-
 // BgmLoop refreshes scores every 12 hours.
 func BgmLoop(stop <-chan struct{}) {
 	if err := bgm.RefreshToken(); err != nil {
@@ -141,13 +112,6 @@ func sleepMinutes(stop <-chan struct{}, minutes int) {
 		minutes = 15
 	}
 	sleepDuration(stop, time.Duration(minutes)*time.Minute)
-}
-
-func sleepSeconds(stop <-chan struct{}, seconds int) {
-	if seconds <= 0 {
-		seconds = 10
-	}
-	sleepDuration(stop, time.Duration(seconds)*time.Second)
 }
 
 func sleepHours(stop <-chan struct{}, hours int) {

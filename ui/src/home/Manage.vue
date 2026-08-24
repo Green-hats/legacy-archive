@@ -59,22 +59,6 @@
                     更新总集数 [F]
                   </el-text>
                 </el-dropdown-item>
-                <el-dropdown-item divided @click="batchScrape(false)">
-                  <el-text>
-                    <el-icon>
-                      <RefreshRight/>
-                    </el-icon>
-                    刮削
-                  </el-text>
-                </el-dropdown-item>
-                <el-dropdown-item @click="batchScrape(true)">
-                  <el-text type="warning">
-                    <el-icon>
-                      <Refresh/>
-                    </el-icon>
-                    刮削 [F]
-                  </el-text>
-                </el-dropdown-item>
                 <el-dropdown-item divided @click="batchEnable(true)">
                   <el-text type="primary">
                     <el-icon>
@@ -323,14 +307,6 @@ let updateTotalEpisodeNumber = (force) => {
       .then(res => {
         ElMessage.success(res.message)
         reLoadList()
-      })
-}
-
-let batchScrape = (force) => {
-  let ids = selectList.value.map(it => it['id']);
-  http.batchScrape(force, ids)
-      .then(res => {
-        ElMessage.success(res.message)
       })
 }
 

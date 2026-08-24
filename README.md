@@ -10,7 +10,7 @@
 |---|---|
 | **云端追番,不占硬盘** | RSS 自动离线下载到 115 网盘,本地零存储 |
 | **外置播放器直连** | 一键跳转 PotPlayer / VLC / MPV 等直接播放,云端文件流式反代 |
-| **一条龙自动化** | 追番 → 刮削 → 缺集/摸鱼检测 → 通知 |
+| **一条龙自动化** | 追番 → 命名/评分 → 缺集/摸鱼检测 → 通知 |
 
 ## 特性一览
 
@@ -19,7 +19,7 @@
 | 下载 | 115 云端离线下载(浏览器 Cookie),自动重试 / 延迟下载 / 失败重试 / 备用 RSS 多源 |
 | 播放 | 全部外置播放器跳转(PotPlayer / VLC / IINA / MPV / Infuse / 弹弹Play / AnimacX / SenPlayer),支持 Range/seek |
 | 追番 | RSS 抓取、剧集提取、重命名模板、备用 RSS |
-| 刮削 | TMDB(NFO/poster/fanart)、Bangumi 搜索/评分/OAuth;Mikan / ani-bt / anime-garden 番剧源 |
+| 元数据 | TMDB 标题命名、Bangumi 搜索/评分/OAuth;Mikan / ani-bt / anime-garden 番剧源 |
 | 通知 | Telegram / Bark / ServerChan / WebHook / Shell / 邮件 / Emby 刷新 |
 | 安全 | 登录鉴权、IP 白名单、反向代理信任列表 |
 
@@ -70,7 +70,7 @@ make clean  # 清理构建产物
 |---|---|
 | RSS 追番 / 重命名 / 缺集摸鱼通知 | 在线播放器(改外置播放器跳转) |
 | 115 云端离线下载 | 本地 BT 客户端(qBittorrent、trackers、标签、做种等待) |
-| TMDB / Bangumi 刮削、番剧源 | 合集、捐赠、QQ 机器人通知、自动更新 |
+| TMDB / Bangumi 元数据、番剧源 | 合集、捐赠、QQ 机器人通知、自动更新 |
 | Telegram / 邮件等通知 | 本地文件迁移/上传(OpenList、FileMove) |
 
 后端 Go 重写、API 契约兼容,配置与订阅文件(`config.v2.json` / `ani.v2.json`)格式一致,可无缝迁移。
@@ -86,13 +86,13 @@ internal/
   model/            数据模型(JSON 契约与上游一致)
   config/           配置加载/持久化/部分合并
   server/           HTTP 路由、处理器、静态资源(嵌入 webui)
-  service/          核心服务(下载引擎、订阅管理、刮削调度)
+  service/          核心服务(下载引擎、订阅管理)
   task/             后台任务循环(rss/bgm)
   download/         下载客户端(115 正式,PikPak 开发中)
   rss/ rename/       RSS 解析 · 剧集提取与重命名
-  bgm/ tmdb/         刮削 API 客户端
+  bgm/ tmdb/         元数据 API 客户端
   mikan/ anibt/ animegarden/   番剧源抓取
-  notify/ scrape/   通知发送器 · NFO 生成
+  notify/           通知发送器
   auth/ cache/ store/ util/    基础设施
 ```
 

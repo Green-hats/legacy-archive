@@ -72,8 +72,6 @@ func (s *Server) register() {
 	r.Handle(http.MethodPost, "/api/mikanGroup", requireAuth(s.handleMikanGroup))
 	r.Handle(http.MethodPost, "/api/getThemoviedbName", requireAuth(s.handleThemoviedbName))
 	r.Handle(http.MethodPost, "/api/getThemoviedbGroup", requireAuth(s.handleThemoviedbGroup))
-	r.Handle(http.MethodPost, "/api/scrape", requireAuth(s.handleScrape))
-	r.Handle(http.MethodPost, "/api/batchScrape", requireAuth(s.handleBatchScrape))
 	r.Handle(http.MethodPost, "/api/getEmbyViews", requireAuth(s.handleEmbyViews))
 	r.Handle(http.MethodPost, "/api/embyWebHook", requireAuth(s.handleEmbyWebHook))
 
