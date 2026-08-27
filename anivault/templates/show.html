@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}{{ m.title_cn or m.title_jp or '详情' }} - AniVault{% endblock %}
+{% block content %}
+
+<div class="row">
+  {% if m.image_url %}
+  <img class="poster" src="{{ m.image_url }}" alt="">
+  {% endif %}
+  <div class="info">
+    <h2>{{ m.title_cn or m.title_jp }}</h2>
+    <div class="subtitle">{{ m.title_jp }} · <a href="https://bgm.tv/subject/{{ m.bangumi_id }}" target="_blank">Bangumi #{{ m.bangumi_id }}</a></div>
+    <div class="badges">
+      {% if m.rating %}<span class="badge">⭐ {{ m.rating }}</span>{% endif %}
+      {% if m.platform %}<span class="badge">{{ m.platform }}</span>{% endif %}
+      {% if m.total_episodes %}<span class="badge">{{ m.total_episodes }}话</span>{% endif %}
+      {% if m.date %}<span class="badge">{{ m.date }}</span>{% endif %}
+    </div>
+    {% if m.tags_json %}
+    <div class="badges">
+      {% for t in m.tags_json | from_json %}
+      <span class="badge">{{ t }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="summary">{{ m.summary or '' }}</div>
+    {% if m.folder_path %}
+    <div style="margin-top:8px;font-size:13px;color:#666;">📁 {{ m.folder_path }}</div>
+    <div style="margin-top:8px;">
+      <a href="/manage" class="btn btn-sm">编辑/删除</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<hr>
+
+<div id="match-table">
+  <p style="color:#999;font-size:13px;">匹配中...</p>
+</div>
+
+{% if m.regex_pattern %}
+<div style="margin-top:8px;font-size:12px;color:#666;">
+  自定义匹配规则: <code>{{ m.regex_pattern }}</code>
+  <a href="#" onclick="clearRegex()" style="color:#e00;margin-left:8px;">清除</a>
+</div>
+{% endif %}
+<div style="margin-top:4px;font-size:12px;color:#999;">
+  <a href="#" onclick="loadMatch(true)">刷新缓存</a>
+</div>
+
+<script>
+const mappingId = {{ m.id }};
+const bangumiId = {{ m.bangumi_id }};
+const folder = {{ m.folder_path | tojson }};
+let currentRows = [];
+
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function renderTable(rows) {
+  currentRows = rows;
+  const el = document.getElementById('match-table');
+  if (!rows.length) { el.innerHTML = '<p style="color:#999;">暂无数据</p>'; return; }
+  let html = `<table><thead><tr><th>#</th><th>Bangumi 剧集</th><th>日期</th><th>本地文件</th></tr></thead><tbody>`;
+  rows.forEach((r) => {
+    const rawName = r.file ? r.file.name : '';
+    const fileCell = r.file
+      ? `<a href="#" class="mpv-link" data-path="${encodeURIComponent(r.file.path)}" data-name="${rawName.replace(/"/g,'&quot;')}">🎬 ${esc(rawName)}</a>`
+      : '<span style="color:#999;">—</span>';
+    const epNum = r.sort != null ? `<strong>${r.sort}</strong>` : '—';
+    const epName = r.bangumi_name || r.bangumi_raw || '—';
+    html += `<tr><td>${epNum}</td><td>${esc(epName)}</td><td>${r.airdate||''}</td><td>${fileCell}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+
+  // Delegated click handler for mpv links
+  el.querySelectorAll('.mpv-link').forEach(a => {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      const el = this;
+      const name = el.dataset.name;
+      const epath = el.dataset.path;
+      el.textContent = '⏳ 启动中...';
+      fetch('/api/open?path=' + epath)
+        .then(() => { el.textContent = '✅ ' + name; setTimeout(() => { el.textContent = '🎬 ' + name; }, 2000); })
+        .catch(() => { el.textContent = '❌ 失败'; setTimeout(() => { el.textContent = '🎬 ' + name; }, 2000); });
+    });
+  });
+}
+
+async function loadMatch(force) {
+  const el = document.getElementById('match-table');
+  el.innerHTML = '<p style="color:#999;font-size:13px;">匹配中...</p>';
+  try {
+    const url = `/api/match?bangumi_id=${bangumiId}&folder=${encodeURIComponent(folder)}&mapping_id=${mappingId}` + (force ? '&refresh=1' : '');
+    const resp = await fetch(url);
+    const rows = await resp.json();
+    renderTable(rows);
+  } catch(e) {
+    el.innerHTML = '<p style="color:#e00;">加载失败: '+e.message+'</p>';
+  }
+}
+
+function clearRegex() {
+  if (!confirm('确定清除自定义匹配规则？')) return;
+  fetch(`/api/mappings/${mappingId}/regex`, {
+    method:'PUT', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({pattern:''})
+  }).then(() => location.reload());
+}
+
+loadMatch();
+</script>
+
+{% endblock %}
